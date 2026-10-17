@@ -137,18 +137,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the core: the <code>lpf</code> command line</h1>
-<p class="sub">Core 0.6.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
+<p class="sub">Core 0.7.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
 
 <h2 id="install" class="anchored">Build</h2>
 <pre>cd core
 cargo build --release          # target/release/lpf
 cargo test --release           # every test, including the comparisons with SciPy and NumPy
-lpf --version                  # lpf 0.6.0
+lpf --version                  # lpf 0.7.0
 lpf help [command]             # this manual, in the terminal</pre>
 
 <h2 id="files" class="anchored">Data files</h2>
 <p>A table is a CSV whose header names each column with its unit in brackets, as the practices' files are written: <code>M(g),x(mm),P(N),delta_x(m)</code>. The delimiter is found (comma, semicolon, tab); with a semicolon or a tab, a decimal comma is accepted. An empty field is an empty cell. A row with more fields than the header has names gets the extra fields as columns named <code>c4</code>, <code>c5</code>… by position, so that nothing measured is dropped. Any column can be addressed by its name or, as in KaleidaGraph, by its position: <code>c0</code>, <code>c1</code>…</p>
 <pre>lpf read data.csv              # the columns, their units, how many values and empty cells</pre>
+
+<h2 id="import" class="anchored">Importing a file of unknown layout</h2>
+<pre>lpf import scope_export.txt                                   # the guess and the table
+lpf import datos.csv --decimal comma --header 2               # the user's corrections
+lpf import datos.csv --save-as datos_std.csv                  # a copy in the app's standard format</pre>
+<p>The importer guesses how the data are organised and says so: the delimiter (tab, semicolon, comma or whitespace), the decimal separator (point or comma; a comma delimiter forces the point), the lines skipped (comments starting with <code>#</code>, <code>%</code>, <code>//</code> or <code>!</code>, blank lines, a preamble before the data), the header line and the units found in it (<code>name(unit)</code>, <code>name [unit]</code>) or in a second line of units, each column's kind (numbers, text, empty), and whether the variables were laid out in rows and transposed. <code>--delimiter</code>, <code>--decimal</code>, <code>--header</code> (a line number, 0 for none) and <code>--transposed</code> override the guess. <code>--save-as</code> writes the table in the app's standard: <code>name(unit)</code> headers, commas between fields, the point as the decimal separator whatever the Mac's locale (R20).</p>
 
 <h2 id="stats" class="anchored">Repeated readings</h2>
 <pre>lpf stats data.csv --col t20 --resolution 0.01</pre>
