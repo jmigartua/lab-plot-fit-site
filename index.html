@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <details class="group" open=""><summary class="t">Background</summary><ul><li><a href="./background/index.html">The programs that inspire</a></li><li><a href="./background/kaleidagraph/index.html">KaleidaGraph, the baseline</a></li><li><a href="./background/practices/index.html">The practices: Técnicas Experimentales I</a></li></ul></details>
 <details class="group" open=""><summary class="t">Design / Roadmap</summary><ul><li><a href="./design/index.html">Design: the proposal</a></li><li><a href="./roadmap/index.html">Roadmap: the phases</a></li></ul></details>
 <details class="group" open=""><summary class="t">Ideas</summary><ul><li><a href="./ideas/index.html">The seed-place</a></li><li><a href="./ideas/I01/index.html">I01 · The Live Bench: the student is the instrument, and the plots and fits follow every keystroke</a></li><li><a href="./ideas/I02/index.html">I02 · Practice templates: the teacher prepares the file, the student opens it and measures</a></li><li><a href="./ideas/I03/index.html">I03 · Uncertainties and units in every column, propagated through formulas and into weighted fits</a></li><li><a href="./ideas/I04/index.html">I04 · The visible pipeline: data to plot to fit as a graph the student can read</a></li><li><a href="./ideas/I05/index.html">I05 · The lab report exported: figures, tables and the fit's results, by the family's figure rules</a></li><li><a href="./ideas/I06/index.html">I06 · The teacher's class view: every bench's live data on one screen</a></li><li><a href="./ideas/I07/index.html">I07 · Sessions recorded as they happen, and replayed</a></li><li><a href="./ideas/I08/index.html">I08 · Entry made for one hand on the apparatus</a></li><li><a href="./ideas/I09/index.html">I09 · The phone as the second keyboard at the bench</a></li><li><a href="./ideas/I10/index.html">I10 · Formula Entry with named columns, and KaleidaGraph's files read</a></li><li><a href="./ideas/I11/index.html">I11 · Every fit checked against Python and KaleidaGraph, and reported as the practices ask</a></li><li><a href="./ideas/I12/index.html">I12 · The tutorial as a film: a whole practice at the Bench, recorded and played by the app</a></li></ul></details>
-<details class="group" open=""><summary class="t">Manual</summary><ul><li><a href="./manual/index.html">About the manual</a></li></ul></details>
+<details class="group" open=""><summary class="t">Manual</summary><ul><li><a href="./manual/index.html">About the manual</a></li><li><a href="./manual/core/index.html">Using the core (lpf)</a></li><li><a href="./manual/theory/index.html">Theoretical basis</a></li></ul></details>
 <details class="group" open=""><summary class="t">Method / Log</summary><ul><li><a href="./about/index.html">How this site works</a></li><li><a href="./log/index.html">The log, every dated step</a></li></ul></details>
 <details class="group" open=""><summary class="t">Release notes</summary><ul><li><a href="./releases/index.html">Release notes</a></li></ul></details>
 </nav>
@@ -146,10 +146,10 @@ document.addEventListener("DOMContentLoaded", function () {
 <div class="net-stats net-stats-grid">
   <div class="net-stat"><div class="v">17</div><div class="k">requirements in the brief</div></div>
   <div class="net-stat"><div class="v">11</div><div class="k">programs on the long list (1 studied or shortlisted)</div></div>
-  <div class="net-stat"><div class="v">17</div><div class="k">log entries (8 decisions)</div></div>
+  <div class="net-stat"><div class="v">19</div><div class="k">log entries (9 decisions)</div></div>
   <div class="net-stat"><div class="v">12</div><div class="k">ideas in the seed-place</div></div>
 </div>
-<div class="updated">Site last built 2026-10-17 07:28</div>
+<div class="updated">Site last built 2026-10-17 07:37</div>
     </div>
   </div>
 </section>
@@ -175,11 +175,11 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="sec-head"><h2 class="anchored">Latest in the log</h2><a class="more" href="log/index.html">All entries →</a></div>
     <p class="sec-intro">Findings, decisions with their reasons, and the work done. Newest first.</p>
 <ul class="home-log">
+<li><span class="d">2026-10-17</span><div><a href="log/index.html#L019">The manual, the help and the tooltips move with every release</a><span class="s">decision · <a href="./manual/core/index.html">Using the core</a> · <a href="./manual/theory/index.html">Theoretical basis</a> · CLAUDE.md · core/src/main.rs</span></div></li>
+<li><span class="d">2026-10-17</span><div><a href="log/index.html#L018">Core 0.3.0: formulas on columns with units and propagated uncertainties (R14)</a><span class="s">work · core/src/units.rs · core/src/formula.rs · core/src/expr.rs · core/tests/formulas.rs</span></div></li>
 <li><span class="d">2026-10-17</span><div><a href="log/index.html#L017">Core 0.2.0: the general curve fit and the polynomial fit, the engine's method lifted, not its code</a><span class="s">work · core/src/nonlinear.rs · core/src/solve.rs · core/src/expr.rs · core/src/poly.rs · core/tests/fits.rs · core/tests/data/fits_reference.py</span></div></li>
 <li><span class="d">2026-10-17</span><div><a href="log/index.html#L016">Phase 1 opens: the Rust core, Hooke's two fits against SciPy</a><span class="s">work · core/ · core/tests/hooke.rs · core/tests/data/hooke_reference.py</span></div></li>
 <li><span class="d">2026-10-17</span><div><a href="log/index.html#L015">A general tool: the practices are one use, not the limit</a><span class="s">decision · conversation of 17 October 2026 · <a href="./brief/index.html#R17">The brief</a></span></div></li>
-<li><span class="d">2026-10-17</span><div><a href="log/index.html#L014">Green lights: I02 templates, I03 units and uncertainties, I04 the pipeline, I05 the report; the Bench is a module</a><span class="s">decision · <a href="./ideas/index.html">Ideas: the seed-place</a> · <a href="./brief/index.html">The brief</a></span></div></li>
-<li><span class="d">2026-10-17</span><div><a href="log/index.html#L013">Josu decides: the fork confirmed, Rust over stdio, Hooke first, the name kept, text files only, templates editable, the template decides what is shown</a><span class="s">decision · conversation of 17 October 2026 · <a href="./design/index.html">Design: the proposal</a></span></div></li>
 </ul>
   </div>
 </section>
