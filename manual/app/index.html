@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the app</h1>
-<p class="sub">App 0.4.0 with core 0.8.0. One section per module as each is built; the text of each section is what the module's help shows. Numbers are written and shown with the point as the decimal separator; a comma typed on entry is accepted and written as a point (R20).</p>
+<p class="sub">App 0.5.0 with core 0.9.0. One section per module as each is built; the text of each section is what the module's help shows. Numbers are written and shown with the point as the decimal separator; a comma typed on entry is accepted and written as a point (R20).</p>
 
 <h2 id="window" class="anchored">The window</h2>
 <p>The app is a fork of Code – OSS, as the TRAE IDE is: the window is the workbench with a laboratory tool's things in it and nothing else. On the left, the activity bar: the Explorer (the folder as it is on disk), the <b>Project</b> view (the files by role, below), and at the bottom Manage (settings, keyboard shortcuts). The main area holds the tables and, later, the plots, fits and report pages as tabs; a table and its plot side by side is the normal arrangement. The status bar shows the core's version (<code>lpf 0.8.0</code>); clicking it opens the log of every call the window made to the core.</p>
@@ -153,8 +153,15 @@ document.addEventListener("DOMContentLoaded", function () {
 <p><b>What the app does with the file.</b> The file's text is the truth: every change is sent to the core (<code>lpf edit</code>, <a href="../core/index.html#edit">the core's manual</a>) with the document's text, and the CSV that comes back replaces the document. So the workbench's undo (⌘Z) takes a table back change by change, auto-save writes the file after a pause, the Timeline keeps local history, and a file changed outside the app is noticed. The window never writes a number itself.</p>
 <p><b>A new table.</b> The Project view's first button, or <b>Data: New table</b> in the palette: a file name, then an empty grid; add a column to begin.</p>
 
+<h2 id="plots" class="anchored">Plots</h2>
+<p>A plot is a file of the project, <code>name.plot.json</code>, that names its table and columns and holds no copy of the data: <b>a plot always follows its table</b>. Change a value in the table and the plot moves; there is no Update Plot.</p>
+<p><b>Making one.</b> On a table, the <b>New plot from this table…</b> button of the editor's title (or the palette): the x column, the y columns (one or more), the column of y's uncertainty for error bars, or none. The file is written beside the table, named after it and its y columns, and opens beside the table. A plot file in the Project view's <b>Plots</b> group opens the same way.</p>
+<p><b>The controls</b> above the plot edit the file, so ⌘Z takes them back: x, y, error bars, the kind (points; points and lines; lines), log x, log y, the title. The axes are labelled from the columns' names and units; a typed label in the file overrides. Ticks never crowd: as many as the width allows, in steps of 1, 2 or 5; when the numbers are long their common factor (×<span class="math inline">\(10^{-5}\)</span>) or their offset (+ 10.6048) goes into the axis title so that each tick shows only the digits that change.</p>
+<p><b>Looking closer.</b> Drag a box to zoom to it; the wheel zooms at the cursor; ⌥-drag pans; double-click, or <b>Reset the view</b>, shows everything again. The readout at the top right gives the values under the cursor. The view is not saved in the file: a fixed range in the file (<code>xrange</code>, <code>yrange</code>) is.</p>
+<p><b>Out of the app.</b> <b>Export as SVG…</b> and <b>Export as PNG…</b> (at twice the screen's size) save the plot as drawn; <b>Copy as SVG</b> (⌘C) puts it on the clipboard for a document that takes SVG. <b>Open as text</b> shows the file itself. The figure rules of the family (identical geometry across a series, LaTeX text) are the Report module's, later.</p>
+
 <h2 id="later" class="anchored">What follows</h2>
-<p>Import into the project with the smart importer (the core has it: <a href="../core/index.html#import">lpf import</a>), sort and mask, a column's uncertainty rule in its header and an inspector for a column; then Plots, Fits, Formulas, the report and the Bench, each with its section here.</p>
+<p>Import into the project with the smart importer (the core has it: <a href="../core/index.html#import">lpf import</a>), sort and mask, a column's uncertainty rule in its header and an inspector for a column; the fit line and the residuals on a plot with the Fits module; then Formulas, the report and the Bench, each with its section here.</p>
 </article>
 
 

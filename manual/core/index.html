@@ -137,13 +137,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the core: the <code>lpf</code> command line</h1>
-<p class="sub">Core 0.8.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
+<p class="sub">Core 0.9.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
 
 <h2 id="install" class="anchored">Build</h2>
 <pre>cd core
 cargo build --release          # target/release/lpf
 cargo test --release           # every test, including the comparisons with SciPy and NumPy
-lpf --version                  # lpf 0.8.0
+lpf --version                  # lpf 0.9.0
 lpf help [command]             # this manual, in the terminal</pre>
 
 <h2 id="files" class="anchored">Data files</h2>
@@ -165,6 +165,15 @@ lpf edit - --set "c1[0]=2,5" --json &lt; data.csv       # from standard input; -
 lpf import datos.csv --decimal comma --header 2               # the user's corrections
 lpf import datos.csv --save-as datos_std.csv                  # a copy in the app's standard format</pre>
 <p>The importer guesses how the data are organised and says so: the delimiter (tab, semicolon, comma or whitespace), the decimal separator (point or comma; a comma delimiter forces the point), the lines skipped (comments starting with <code>#</code>, <code>%</code>, <code>//</code> or <code>!</code>, blank lines, a preamble before the data), the header line and the units found in it (<code>name(unit)</code>, <code>name [unit]</code>) or in a second line of units, each column's kind (numbers, text, empty), and whether the variables were laid out in rows and transposed. <code>--delimiter</code>, <code>--decimal</code>, <code>--header</code> (a line number, 0 for none) and <code>--transposed</code> override the guess. <code>--save-as</code> writes the table in the app's standard: <code>name(unit)</code> headers, commas between fields, the point as the decimal separator whatever the Mac's locale (R20).</p>
+
+<h2 id="plot" class="anchored">Plots and axes</h2>
+<pre>lpf plot new datos_hooke_1.csv --x delta_x --y P --dy delta_x &gt; hooke_P.plot.json   # a new plot file
+lpf plot hooke_P.plot.json --width 800 --height 500                                  # resolved for a plot area of 800 × 500 px
+lpf plot hooke_P.plot.json --width 800 --height 500 --xrange 0.03,0.08              # the view (zoom, pan)
+cat hooke_P.plot.json | lpf plot - --dir . --width 800 --height 500                  # the window's unsaved file, its table relative to --dir
+lpf ticks --min 2.596e-5 --max 2.604e-5 --length 500                                 # an axis alone: ×10⁻⁵ in the title, labels 2.596 … 2.604
+lpf ticks --min 3 --max 2500 --length 600 --log                                      # 10⁰ … 10⁴</pre>
+<p>A plot is a file of the project, <code>name.plot.json</code>: its table (relative to the plot file), the x column, the y columns each with an optional error-bar column, the kind (<code>scatter</code>, <code>line</code>, <code>lines</code>), the title, the axis labels (else the columns' names and units), log axes, fixed ranges. It holds no copy of the data: a plot always follows its table. <code>plot</code> resolves it for the window: each point with its values and its fractions of the axes, the error bars' ends as fractions, and the axes with their ticks placed for the width and height given, so that the window only maps fractions to pixels. The ticks: steps of 1, 2 or 5 times a power of ten, as many as the space allows (one label per 70 px along x, 32 along y), the range anchored on ticks, the common factor (×<span class="math inline">\(10^{-5}\)</span>) or the offset (+ 10.6048) taken into the axis title when the digits that change are far down, the true minus sign, log axes by decades (<a href="../theory/index.html#axes">theory</a>). Each axis also carries its map from a fraction to a value, value = a + b·t (10^(a + b·t) on a log axis), which is what the window uses for the readout under the cursor and for the ranges of a zoom.</p>
 
 <h2 id="stats" class="anchored">Repeated readings</h2>
 <pre>lpf stats data.csv --col t20 --resolution 0.01</pre>
