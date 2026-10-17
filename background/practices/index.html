@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>The practices · lab-plot-fit – lab-plot-fit · data, plots and fits for the teaching laboratory</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<link href="../../assets/favicon.svg" rel="icon" type="image/svg+xml">
+<script src="../../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-html-afe927e19676d0e50b1726048be49fb1.min.css" rel="stylesheet" append-hash="true" data-mode="light">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<style>html{ scroll-behavior: smooth; }</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&amp;family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<!-- KaTeX auto-render: publication titles carry TeX inside generated HTML that
+     Quarto's own math pipeline never sees (same approach as thermomat). -->
+<script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+/* The header ribbon is sticky; the side columns and anchor targets need its height. */
+(function () {
+  function headH() {
+    var t = document.querySelector(".topline"), h = document.querySelector(".site-head");
+    var px = (t ? t.offsetHeight : 0) + (h ? h.offsetHeight : 0);
+    if (px) document.documentElement.style.setProperty("--head-h", px + "px");
+  }
+  document.addEventListener("DOMContentLoaded", headH);
+  window.addEventListener("load", headH);
+  window.addEventListener("resize", headH);
+})();
+document.addEventListener("DOMContentLoaded", function () {
+  if (window.renderMathInElement) {
+    renderMathInElement(document.body, {
+      delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }, { left: "\\(", right: "\\)", display: false }],
+      throwOnError: false
+    });
+  }
+  /* Quarto's KaTeX pipeline writes <span class="math inline">TeX</span> without delimiters and renders
+     them in a loop that reads firstChild.data; that loop dies at the first span the auto-render above
+     has already turned into KaTeX markup, leaving every later formula raw. Render the rest here. */
+  if (window.katex) {
+    document.querySelectorAll(".math").forEach(function (el) {
+      if (!el.querySelector(".katex")) {
+        var t = el.textContent.replace(/^\s*\\[\(\[]/, "").replace(/\\[\)\]]\s*$/, "");
+        try { katex.render(t, el, { displayMode: el.classList.contains("display"), throwOnError: false }); } catch (e) {}
+      }
+      /* Quarto's loop would still visit this span and wipe it (firstChild is now an element, not text):
+         take it out of its sight. No stylesheet of the site depends on the class; KaTeX's own output carries the layout. */
+      el.classList.remove("math"); el.classList.add("math-done");
+    });
+  }
+});
+</script>
+
+
+<link rel="stylesheet" href="../../assets/styles/theme.css">
+<link rel="stylesheet" href="../../assets/styles/site.css">
+<link rel="stylesheet" href="../../assets/styles/project.css">
+</head>
+
+<body>
+
+<!-- Site header, family kit. Root-absolute hrefs are rewritten by Quarto to
+     page-relative links at render time. -->
+<div class="topline"></div>
+<header class="site-head">
+  <div class="site-head__inner">
+    <a href="../../index.html" class="wordmark">lab <span class="accent">plot</span> fit
+      <span class="wordmark-sub">Data, plots and fits for the teaching laboratory · KaleidaGraph's features in TRAE's window, native for the Mac · started October 2026</span>
+    </a>
+    <!-- The entries are the groups of data/nav.yml, in the same order; the two navigations say the same thing. -->
+    <nav class="site-nav">
+      <a href="../../index.html">Overview</a>
+      <a href="../../brief/index.html">Brief</a>
+      <a href="../../background/index.html">Background</a>
+      <span class="nav-pair"><a href="../../design/index.html">Design</a><span class="sl">/</span><a href="../../roadmap/index.html">Roadmap</a></span>
+      <a href="../../ideas/index.html" class="nav-ideas">Ideas</a>
+      <a href="../../manual/index.html">Manual</a>
+      <span class="nav-right">
+        <span class="nav-pair"><a href="../../about/index.html">Method</a><span class="sl">/</span><a href="../../log/index.html">Log</a></span>
+        <a href="../../releases/index.html">Release notes</a>
+      </span>
+    </nav>
+  </div>
+</header>
+<!-- generated by tools/build.py: left navigation + opening of the reading column -->
+<div class="docs">
+<nav class="docs-nav" aria-label="Site sections">
+<button class="docs-fold" type="button" data-fold="nav" aria-label="Hide the navigation" title="Hide the navigation">‹</button>
+<details class="group" open=""><summary class="t">Overview</summary><ul><li><a href="../../index.html">Overview</a></li></ul></details>
+<details class="group" open=""><summary class="t">Brief</summary><ul><li><a href="../../brief/index.html">The brief, organised</a></li></ul></details>
+<details class="group" open=""><summary class="t">Background</summary><ul><li><a href="../../background/index.html">The programs that inspire</a></li><li><a href="../../background/kaleidagraph/index.html">KaleidaGraph, the baseline</a></li><li><a href="../../background/practices/index.html">The practices: Técnicas Experimentales I</a></li></ul></details>
+<details class="group" open=""><summary class="t">Design / Roadmap</summary><ul><li><a href="../../design/index.html">Design: the proposal</a></li><li><a href="../../roadmap/index.html">Roadmap: the phases</a></li></ul></details>
+<details class="group" open=""><summary class="t">Ideas</summary><ul><li><a href="../../ideas/index.html">The seed-place</a></li><li><a href="../../ideas/I01/index.html">I01 · The Live Bench: the student is the instrument, and the plots and fits follow every keystroke</a></li><li><a href="../../ideas/I02/index.html">I02 · Practice templates: the teacher prepares the file, the student opens it and measures</a></li><li><a href="../../ideas/I03/index.html">I03 · Uncertainties and units in every column, propagated through formulas and into weighted fits</a></li><li><a href="../../ideas/I04/index.html">I04 · The visible pipeline: data to plot to fit as a graph the student can read</a></li><li><a href="../../ideas/I05/index.html">I05 · The lab report exported: figures, tables and the fit's results, by the family's figure rules</a></li><li><a href="../../ideas/I06/index.html">I06 · The teacher's class view: every bench's live data on one screen</a></li><li><a href="../../ideas/I07/index.html">I07 · Sessions recorded as they happen, and replayed</a></li><li><a href="../../ideas/I08/index.html">I08 · Entry made for one hand on the apparatus</a></li><li><a href="../../ideas/I09/index.html">I09 · The phone as the second keyboard at the bench</a></li><li><a href="../../ideas/I10/index.html">I10 · Formula Entry with named columns, and KaleidaGraph's files read</a></li><li><a href="../../ideas/I11/index.html">I11 · Every fit checked against Python and KaleidaGraph, and reported as the practices ask</a></li><li><a href="../../ideas/I12/index.html">I12 · The tutorial as a film: a whole practice at the Bench, recorded and played by the app</a></li></ul></details>
+<details class="group" open=""><summary class="t">Manual</summary><ul><li><a href="../../manual/index.html">About the manual</a></li></ul></details>
+<details class="group" open=""><summary class="t">Method / Log</summary><ul><li><a href="../../about/index.html">How this site works</a></li><li><a href="../../log/index.html">The log, every dated step</a></li></ul></details>
+<details class="group" open=""><summary class="t">Release notes</summary><ul><li><a href="../../releases/index.html">Release notes</a></li></ul></details>
+</nav>
+<div class="docs-main">
+
+<header id="title-block-header">
+<h1 class="title">The practices</h1>
+
+</header>
+
+
+<article class="page-article">
+<h1>The practices: Técnicas Experimentales I</h1>
+<p class="sub">Requirements R04 and R11, log <a href="../../log/index.html#L011">L011</a>. The eight practices of the course as Josu teaches it, read from his guides: what each one measures and with what, the tables the student fills, the plots, the fits and what each gives with its error formula as the guide writes it, and what the Bench shows during the session. Generated from <code>data/practices.yml</code>; the guides it cites lie in <code>practices/uned/tecI/</code>, which is not published.</p>
+<p class="sub"><b>Técnicas Experimentales I</b> · Grado en Física, UNED, taught at the Facultad de Ciencia y Tecnología, UPV/EHU (Leioa) · 2024–2025 · 8 practices, one report per practice, individual, handed in as one PDF.</p>
+<h2 id="conventions" class="anchored">The course's conventions</h2><p>The course's error guide (errores.pdf, 4 pages): a result is always x <span class="math inline">\(\pm\)</span> Δx with its unit; errors are given with one significant figure (one and a half exceptionally); the best value of n repeated readings is their mean and its error the "error cuadrático" Δx = √(Σ(x̄ − x_k)² / (n(n − 1))), used only when it exceeds the instrument's resolution, which is otherwise the error; an indirect quantity y = f(p, q, …) has Δy by quadrature, √(Σ (∂f/∂p · Δp)²), or by the upper bound Σ |∂f/∂p| Δp for quick estimates. The guides use both: Δg = |4π²/<span class="math inline">\(\mathrm{m}^{2}\)</span>| Δm (upper bound, one variable) and Δk by quadrature (two variables). The regression guide (regresiones.pdf, 4 pages) sends the student to <strong>KaleidaGraph</strong>: data in the table, Formula Entry for a column operation (<code>C2 = 2*C1 + C0</code>), Gallery ▸ Linear ▸ Scatter, Curve Fit ▸ General ▸ fit1 (y = m1 + m2·M0) with Display Equation for the parameters and their errors, File ▸ Print Graphics, Save Graph and Save Data. The course site's own advice for the session: "introducid datos en el ordenador a medida que medís y verificad en tiempo real si el experimento está saliendo bien", which is the Bench of R05 in the course's words.</p><p class="cite">errores.pdf, pp. 1–3 · regresiones.pdf, pp. 1–4 · site-index.qmd L284</p>
+<h2 id="summary" class="anchored">The eight, at a glance</h2><div class="table-wrap">
+<table class="inventory practices caption-top">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">Practice</th>
+<th data-quarto-table-cell-role="th">Tables · rows</th>
+<th data-quarto-table-cell-role="th">Plots</th>
+<th data-quarto-table-cell-role="th">Fits</th>
+<th data-quarto-table-cell-role="th">Gives</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#P1"><strong>1 · Péndulo físico</strong></a><br>
+<span class="m">The physical pendulum</span></td>
+<td>T against b (14)</td>
+<td>T – b; bT<span class="math inline">\(^{2}\)</span> – b<span class="math inline">\(^{2}\)</span></td>
+<td>bT<span class="math inline">\(^{2}\)</span> = m·b<span class="math inline">\(^{2}\)</span> + n, least squares</td>
+<td>g, k</td>
+</tr>
+<tr class="even">
+<td><a href="#P2"><strong>2 · Ley de Hooke</strong></a><br>
+<span class="m">Hooke's law</span></td>
+<td>Static: load against elongation (10); Dynamic: period against mass (12)</td>
+<td>P – Δx; T<span class="math inline">\(^{2}\)</span> – M</td>
+<td>P = K·Δx (+ n), least squares; T<span class="math inline">\(^{2}\)</span> = a·M + b, least squares</td>
+<td>K (static), K (dynamic), αm, m (spring), from αm with α = 1/3</td>
+</tr>
+<tr class="odd">
+<td><a href="#P3"><strong>3 · Plano inclinado</strong></a><br>
+<span class="m">The inclined plane</span></td>
+<td>Periods: one spring, two in series, two in parallel (3); Runs at seven inclinations (twice: without and with extra mass) (7)</td>
+<td>a – sin <span class="math inline">\(\theta\)</span></td>
+<td>a = g·sin <span class="math inline">\(\theta\)</span> (+ n), least squares; no fit: k from T = 2π√(m/k)</td>
+<td>g (without load), g (with load), k, k_eff series, k_eff parallel</td>
+</tr>
+<tr class="even">
+<td><a href="#P4"><strong>4 · Corriente continua I</strong></a><br>
+<span class="m">Direct current I</span></td>
+<td>Resistances (7); Source under load (twice: the cell, the generator + potentiometer) (3)</td>
+<td>1/V – 1/R</td>
+<td>1/V = (1/<span class="math inline">\(\varepsilon\)</span>) + (r_i/<span class="math inline">\(\varepsilon\)</span>)·(1/R), least squares</td>
+<td><span class="math inline">\(\varepsilon\)</span>, r_i</td>
+</tr>
+<tr class="odd">
+<td><a href="#P5"><strong>5 · Corriente continua II</strong></a><br>
+<span class="m">Direct current II</span></td>
+<td>Short and long arrangement (6); Drops in series (3); The lamp's characteristic (20)</td>
+<td>I – V; V/I – V</td>
+<td>none required; proposal: a straight line through the first points (0–500 mV) for R cold, and R = V/I per point</td>
+<td>R cold</td>
+</tr>
+<tr class="even">
+<td><a href="#P6"><strong>6 · Descarga del condensador</strong></a><br>
+<span class="m">Discharge of a capacitor</span></td>
+<td>Resistances by colour code (3); Half-life (5); Discharge V(t), with R and without (15)</td>
+<td>ln V – t; V – t</td>
+<td>ln V = m·t + b, least squares; proposal: V = V₀·exp(−t/<span class="math inline">\(\tau\)</span>), nonlinear least squares, weighted</td>
+<td>RC, V₀, <span class="math inline">\(\tau\)</span> = RC</td>
+</tr>
+<tr class="odd">
+<td><a href="#P7"><strong>7 · Ondas estacionarias</strong></a><br>
+<span class="m">Standing waves on a string</span></td>
+<td>f_n against n at constant T (one table per tension, ≥ 3 tensions) (5); f_n against T at fixed n (5)</td>
+<td>f_n – n; f_n – √T</td>
+<td>f_n = (v/2l)·n (+ b), least squares; f_n = s·√T (+ b), least squares</td>
+<td>v, μ, μ</td>
+</tr>
+<tr class="even">
+<td><a href="#P8"><strong>8 · Vaporización del agua</strong></a><br>
+<span class="m">The latent heat of vaporisation of water</span></td>
+<td>Two powers (differences) (2); Ten powers (regression) (10)</td>
+<td>M – E</td>
+<td>M = s·E + n, least squares; no fit: differences</td>
+<td>q, n, q</td>
+</tr>
+</tbody>
+</table>
+</div>
+<section class="param practice" id="P1"><h2 class="anchored">1 · Péndulo físico</h2><p class="param-meta"><code>P1</code> · The physical pendulum · 5 questions</p><p>The period T of a thin rod oscillating about axes at distances b from its centre of mass; from T(b), the gravitational acceleration g and the rod's radius of gyration k, three ways.</p><h3 class="anchored">Measured</h3><div class="table-wrap">
+<table class="inventory caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">What</th>
+<th data-quarto-table-cell-role="th">Instrument</th>
+<th data-quarto-table-cell-role="th">Unit</th>
+<th data-quarto-table-cell-role="th">Uncertainty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>b, axis to centre of mass</strong></td>
+<td>the rod's notches every centimetre, a ruler</td>
+<td>m</td>
+<td>the ruler's resolution; b <span class="math inline">\(\ge 6\)</span> cm</td>
+</tr>
+<tr class="even">
+<td><strong>20 T, twenty oscillations</strong></td>
+<td>chronometer</td>
+<td>s</td>
+<td>five repeats per b; the mean and its error</td>
+</tr>
+<tr class="odd">
+<td><strong>L, the rod's length</strong></td>
+<td>ruler</td>
+<td>m</td>
+<td>resolution; for the theoretical k</td>
+</tr>
+</tbody>
+</table>
+</div><h3 class="anchored">Tables</h3><ul class="k-list"><li><b>T against b</b>, 14 rows: b (m) <span class="m">measured</span>; 20T₁ … 20T₅ (s) <span class="m">repeated <span class="math inline">\(\times 5\)</span></span>; mean of 20T (s) <span class="m">derived: mean of the five</span>; T (s) <span class="m">derived: mean / 20</span>; bT<span class="math inline">\(^{2}\)</span> (m·<span class="math inline">\(\mathrm{s}^{2}\)</span>) <span class="m">derived</span>; b<span class="math inline">\(^{2}\)</span> (<span class="math inline">\(\mathrm{m}^{2}\)</span>) <span class="m">derived</span></li></ul><h3 class="anchored">Plots</h3><ul class="k-list"><li><b>T</b> against <b>b</b>: the curve has a minimum at b = k; a high density of points near the minimum is asked for, to read k graphically</li><li><b>bT<span class="math inline">\(^{2}\)</span></b> against <b>b<span class="math inline">\(^{2}\)</span></b>: a straight line: slope 4π²/g, intercept 4π²k<span class="math inline">\(^{2}\)</span>/g</li></ul><h3 class="anchored">Fits, and what they give</h3><ul class="k-list"><li><b>bT<span class="math inline">\(^{2}\)</span> = m·b<span class="math inline">\(^{2}\)</span> + n, least squares</b><ul><li>g: g = 4π²/m; <span class="m">Δg = |4π²/<span class="math inline">\(\mathrm{m}^{2}\)</span>| · |Δm|</span></li><li>k: k = √(n·g/4π²); <span class="m">Δk = (1/4π) · √((n/g)·Δg<span class="math inline">\(^{2}\)</span> + (g/n)·Δn<span class="math inline">\(^{2}\)</span>)</span></li></ul></li></ul><h3 class="anchored">Results table</h3><p>k (graphical, from the minimum of T(b)), k (theory, L/(2√3)), k (regression), g (regression).</p><h3 class="anchored">At the Bench</h3><p>Each b is a row; the five chronometer readings arrive one by one and the row's mean, T, bT<span class="math inline">\(^{2}\)</span> and b<span class="math inline">\(^{2}\)</span> fill themselves; the T(b) curve shows the minimum forming, and the bT<span class="math inline">\(^{2}\)</span> against b<span class="math inline">\(^{2}\)</span> line with g and k and their errors updating. A reading of 20T far from its four siblings is marked.</p><p class="cite">guion_01_pendulo_fisico.qmd L80–107 · guion_01_pendulo_fisico.qmd L139–191 · guion_01_pendulo_fisico.qmd L204–211</p></section>
+<section class="param practice" id="P2"><h2 class="anchored">2 · Ley de Hooke</h2><p class="param-meta"><code>P2</code> · Hooke's law · 5 questions</p><p>The spring constant K of a helical spring by a static method (loads and elongations) and a dynamic one (periods of oscillation against the mass), the effective mass αm of the spring, and the spring's mass three ways.</p><h3 class="anchored">Measured</h3><div class="table-wrap">
+<table class="inventory caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">What</th>
+<th data-quarto-table-cell-role="th">Instrument</th>
+<th data-quarto-table-cell-role="th">Unit</th>
+<th data-quarto-table-cell-role="th">Uncertainty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>M, the load</strong></td>
+<td>balance; calibrated masses</td>
+<td>g → kg</td>
+<td>the balance's resolution</td>
+</tr>
+<tr class="even">
+<td><strong>Δx, the elongation</strong></td>
+<td>vertical scale in millimetres</td>
+<td>m</td>
+<td>resolution</td>
+</tr>
+<tr class="odd">
+<td><strong>t₂₀, twenty oscillations</strong></td>
+<td>chronometer</td>
+<td>s</td>
+<td>resolution and reaction; one reading per mass in the guide</td>
+</tr>
+<tr class="even">
+<td><strong>the spring's dimensions</strong></td>
+<td>micrometer</td>
+<td>m</td>
+<td>resolution; for the volume</td>
+</tr>
+</tbody>
+</table>
+</div><h3 class="anchored">Tables</h3><ul class="k-list"><li><b>Static: load against elongation</b>, 10 rows: M (g) <span class="m">measured</span>; P = M·g (N) <span class="m">derived</span>; Δx (m) <span class="m">measured</span></li><li><b>Dynamic: period against mass</b>, 12 rows: M (g) <span class="m">measured</span>; M (kg) <span class="m">derived: unit change</span>; t₂₀ (s) <span class="m">measured</span>; T (s) <span class="m">derived: t₂₀/20</span>; T<span class="math inline">\(^{2}\)</span> (<span class="math inline">\(\mathrm{s}^{2}\)</span>) <span class="m">derived</span></li></ul><h3 class="anchored">Plots</h3><ul class="k-list"><li><b>P</b> against <b>Δx</b>: a straight line through the origin whose slope is K</li><li><b>T<span class="math inline">\(^{2}\)</span></b> against <b>M</b>: a straight line: slope 4π²/K, intercept 4π²αm/K</li></ul><h3 class="anchored">Fits, and what they give</h3><ul class="k-list"><li><b>P = K·Δx (+ n), least squares</b><ul><li>K (static): the slope; <span class="m">ΔK = <span class="math inline">\(\Delta\)</span>(slope)</span></li></ul></li><li><b>T<span class="math inline">\(^{2}\)</span> = a·M + b, least squares</b><ul><li>K (dynamic): K = 4π²/a; <span class="m">ΔK = |4π²/a<span class="math inline">\(^{2}\)</span>| · |Δa|</span></li><li>αm: αm = b/a; <span class="m"><span class="math inline">\(\Delta\)</span>(αm) = (1/a<span class="math inline">\(^{2}\)</span>) · √(a<span class="math inline">\(^{2}\)</span>·Δb<span class="math inline">\(^{2}\)</span> + b<span class="math inline">\(^{2}\)</span>·Δa<span class="math inline">\(^{2}\)</span>)</span></li><li>m (spring), from αm with α = 1/3: m = 3·αm; <span class="m">3·<span class="math inline">\(\Delta\)</span>(αm)</span></li></ul></li></ul><h3 class="anchored">Results table</h3><p>K (static), K (dynamic), αm, m spring (from αm), m spring (balance), m spring (volume × density, ρ = 8.0 <span class="math inline">\(\pm\)</span> 0.2 g/<span class="math inline">\(\mathrm{cm}^{3}\)</span>).</p><h3 class="anchored">At the Bench</h3><p>Two series in one session; each load's elongation puts a point on the P–Δx line and K updates; each t₂₀ puts a point on the T<span class="math inline">\(^{2}\)</span>–M line and K, αm update; the two K's are shown side by side as they converge or not. Real data of a session exist (datos_hooke_1.csv, datos_hooke_2.csv) and are the first test data of the core.</p><p class="cite">guion_02_ley_hooke.qmd L51–74 · guion_02_ley_hooke.qmd L77–159 · guion_02_ley_hooke.qmd L180–189 · datos_hooke_1.csv · datos_hooke_2.csv</p></section>
+<section class="param practice" id="P3"><h2 class="anchored">3 · Plano inclinado</h2><p class="param-meta"><code>P3</code> · The inclined plane · 5 questions</p><p>A spring's constant from the period of a cart oscillating on an inclined track; two springs in series and in parallel; then g from the cart's acceleration down the track at seven inclinations, with and without extra mass.</p><h3 class="anchored">Measured</h3><div class="table-wrap">
+<table class="inventory caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">What</th>
+<th data-quarto-table-cell-role="th">Instrument</th>
+<th data-quarto-table-cell-role="th">Unit</th>
+<th data-quarto-table-cell-role="th">Uncertainty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>M, the cart's mass</strong></td>
+<td>balance</td>
+<td>g</td>
+<td>the balance's resolution</td>
+</tr>
+<tr class="even">
+<td><strong>t, three oscillations</strong></td>
+<td>chronometer</td>
+<td>s</td>
+<td>five repeats; mean and its error</td>
+</tr>
+<tr class="odd">
+<td><strong>h, the track's height; its length</strong></td>
+<td>tape</td>
+<td>m</td>
+<td>resolution; sin <span class="math inline">\(\theta\)</span> derived</td>
+</tr>
+<tr class="even">
+<td><strong><span class="math inline">\(x_0\)</span>, x_f, the cart's positions</strong></td>
+<td>the track's scale</td>
+<td>m</td>
+<td>resolution; d = x_f − <span class="math inline">\(x_0\)</span></td>
+</tr>
+<tr class="odd">
+<td><strong>t, the run down the track</strong></td>
+<td>chronometer</td>
+<td>s</td>
+<td>four repeats; mean and <span class="math inline">\(\sigma\)</span>_t</td>
+</tr>
+</tbody>
+</table>
+</div><h3 class="anchored">Tables</h3><ul class="k-list"><li><b>Periods: one spring, two in series, two in parallel</b>, 3 rows: t₁ … t₅ (s) <span class="m">repeated <span class="math inline">\(\times 5\)</span></span>; T mean (s) <span class="m">derived: mean/3 (three cycles timed)</span>; ΔT mean (s) <span class="m">derived: the error of the mean</span></li><li><b>Runs at seven inclinations (twice: without and with extra mass)</b>, 7 rows: h (cm) <span class="m">measured: 10, 9, … 4</span>; sin <span class="math inline">\(\theta\)</span> <span class="m">derived: h / track length</span>; <span class="math inline">\(x_0\)</span>, x_f, d (m) <span class="m">measured, derived</span>; t₁ … t₄ (s) <span class="m">repeated <span class="math inline">\(\times 4\)</span></span>; t̄, <span class="math inline">\(\sigma\)</span>_t (s) <span class="m">derived</span>; a = 2d/t̄² (m/<span class="math inline">\(\mathrm{s}^{2}\)</span>) <span class="m">derived; no error asked, significant figures by eye</span></li></ul><h3 class="anchored">Plots</h3><ul class="k-list"><li><b>a</b> against <b>sin <span class="math inline">\(\theta\)</span></b>: a straight line whose slope is g; twice, without and with extra mass</li></ul><h3 class="anchored">Fits, and what they give</h3><ul class="k-list"><li><b>a = g·sin <span class="math inline">\(\theta\)</span> (+ n), least squares</b><ul><li>g (without load): the slope; <span class="m"><span class="math inline">\(\Delta\)</span>(slope)</span></li><li>g (with load): the slope; <span class="m"><span class="math inline">\(\Delta\)</span>(slope)</span></li></ul></li><li><b>no fit: k from T = 2π√(m/k)</b><ul><li>k, k_eff series, k_eff parallel: k = 4π² m / T<span class="math inline">\(^{2}\)</span>; <span class="m">propagated from Δm and ΔT (question 1)</span></li></ul></li></ul><h3 class="anchored">Results table</h3><p>M cart, k (one spring), k_eff series, k_eff parallel, g (without load), g (with load).</p><h3 class="anchored">At the Bench</h3><p>The repeated timings of one row are the unit of entry: five (or four) readings, the mean and its error at once, the row's k or a; the a–sin <span class="math inline">\(\theta\)</span> line grows one row per inclination with g updating; a timing far from its siblings is marked (the reaction-time question is visible in the data).</p><p class="cite">guion_03_plano_inclinado.qmd L96–110 · guion_03_plano_inclinado.qmd L148–204 · guion_03_plano_inclinado.qmd L207–216</p></section>
+<section class="param practice" id="P4"><h2 class="anchored">4 · Corriente continua I</h2><p class="param-meta"><code>P4</code> · Direct current I · 4 questions</p><p>Resistances in series and in parallel measured and computed; the electromotive force and internal resistance of a dry cell and of a generator-plus-potentiometer source, from the voltage across several load resistances.</p><h3 class="anchored">Measured</h3><div class="table-wrap">
+<table class="inventory caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">What</th>
+<th data-quarto-table-cell-role="th">Instrument</th>
+<th data-quarto-table-cell-role="th">Unit</th>
+<th data-quarto-table-cell-role="th">Uncertainty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><span class="math inline">\(R_1\)</span>, <span class="math inline">\(R_2\)</span>, R₃ and their series and parallel combinations</strong></td>
+<td>multimeter as ohmmeter</td>
+<td><span class="math inline">\(\Omega\)</span></td>
+<td>the multimeter's resolution and accuracy</td>
+</tr>
+<tr class="even">
+<td><strong>V across the source with R = 220, 100, 50 <span class="math inline">\(\Omega\)</span></strong></td>
+<td>multimeter as voltmeter</td>
+<td>V</td>
+<td>resolution and accuracy; read quickly (heating)</td>
+</tr>
+</tbody>
+</table>
+</div><h3 class="anchored">Tables</h3><ul class="k-list"><li><b>Resistances</b>, 7 rows: R measured (<span class="math inline">\(\Omega\)</span>) <span class="m">measured</span>; R series, parallel (theory) (<span class="math inline">\(\Omega\)</span>) <span class="m">derived: ΣR; (Σ1/R)⁻¹</span></li><li><b>Source under load (twice: the cell, the generator + potentiometer)</b>, 3 rows: R (<span class="math inline">\(\Omega\)</span>) <span class="m">measured</span>; V (V) <span class="m">measured</span>; 1/R, 1/V (<span class="math inline">\(\Omega\)</span>⁻¹, V<span class="math inline">\(^{-1}\)</span>) <span class="m">derived</span></li></ul><h3 class="anchored">Plots</h3><ul class="k-list"><li><b>1/V</b> against <b>1/R</b>: a straight line: intercept 1/<span class="math inline">\(\varepsilon\)</span>, slope r_i/<span class="math inline">\(\varepsilon\)</span></li></ul><h3 class="anchored">Fits, and what they give</h3><ul class="k-list"><li><b>1/V = (1/<span class="math inline">\(\varepsilon\)</span>) + (r_i/<span class="math inline">\(\varepsilon\)</span>)·(1/R), least squares</b><ul><li><span class="math inline">\(\varepsilon\)</span>: <span class="math inline">\(\varepsilon\)</span> = 1/intercept; <span class="m">propagated from <span class="math inline">\(\Delta\)</span>(intercept)</span></li><li>r_i: r_i = slope/intercept; <span class="m">propagated from both (quadrature)</span></li></ul></li></ul><h3 class="anchored">Results table</h3><p>R series and parallel, measured and theoretical, <span class="math inline">\(\varepsilon\)</span> and r_i of the cell, <span class="math inline">\(\varepsilon\)</span> and r_i of the effective source, <span class="math inline">\(\varepsilon\)</span> measured directly.</p><h3 class="anchored">At the Bench</h3><p>Few points (three loads per source) and the fit is in reciprocals: the Bench shows 1/V against 1/R with the line and <span class="math inline">\(\varepsilon\)</span>, r_i, and warns that with three points the errors mean little; the power dissipated in R is computed before the reading (the guide's warning) and shown.</p><p class="cite">guion_04_corriente_continua_1.qmd L38–58 · guion_04_corriente_continua_1.qmd L60–84 · guion_04_corriente_continua_1.qmd L130–146</p></section>
+<section class="param practice" id="P5"><h2 class="anchored">5 · Corriente continua II</h2><p class="param-meta"><code>P5</code> · Direct current II · 4 questions</p><p>The effect of the instruments on the circuit: three resistances measured with the voltmeter and ammeter in the short and the long arrangement; voltage drops across resistances in series at three scales; the characteristic curve I(V) of a filament lamp.</p><h3 class="anchored">Measured</h3><div class="table-wrap">
+<table class="inventory caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">What</th>
+<th data-quarto-table-cell-role="th">Instrument</th>
+<th data-quarto-table-cell-role="th">Unit</th>
+<th data-quarto-table-cell-role="th">Uncertainty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>V and I for R <span class="math inline">\(\approx 50\)</span> <span class="math inline">\(\Omega\)</span>, 500 <span class="math inline">\(\Omega\)</span>, 1 MΩ, in two arrangements</strong></td>
+<td>two multimeters</td>
+<td>V, A</td>
+<td>resolution and accuracy; the 10 A input never used</td>
+</tr>
+<tr class="even">
+<td><strong>V₁, V₂, V₃ across two resistances in series, three scales</strong></td>
+<td>one voltmeter</td>
+<td>V</td>
+<td>resolution and accuracy</td>
+</tr>
+<tr class="odd">
+<td><strong>V and I of the lamp, <span class="math inline">\(\ge 20\)</span> voltages, half of them in 0–500 mV</strong></td>
+<td>two multimeters, a 100 <span class="math inline">\(\Omega\)</span> series resistor</td>
+<td>mV, mA</td>
+<td>resolution and accuracy</td>
+</tr>
+</tbody>
+</table>
+</div><h3 class="anchored">Tables</h3><ul class="k-list"><li><b>Short and long arrangement</b>, 6 rows: V, I (V, A) <span class="m">measured</span>; R = V/I (<span class="math inline">\(\Omega\)</span>) <span class="m">derived</span>; R ohmmeter (<span class="math inline">\(\Omega\)</span>) <span class="m">measured</span></li><li><b>Drops in series</b>, 3 rows: V₁, V₂, V₃ (V) <span class="m">measured</span>; V₁ + V₂ (V) <span class="m">derived; compared with V₃</span></li><li><b>The lamp's characteristic</b>, 20 rows: V (mV) <span class="m">measured</span>; I (mA) <span class="m">measured</span>; V/I (<span class="math inline">\(\Omega\)</span>) <span class="m">derived: the resistance at each point</span></li></ul><h3 class="anchored">Plots</h3><ul class="k-list"><li><b>I</b> against <b>V</b>: not a straight line: the filament's resistance rises with temperature; the slope at the origin is 1/R cold</li><li><b>V/I</b> against <b>V</b>: the resistance against the voltage, to read between which values it varied (proposal: the guide asks the question, not the plot)</li></ul><h3 class="anchored">Fits, and what they give</h3><ul class="k-list"><li><b>none required; proposal: a straight line through the first points (0–500 mV) for R cold, and R = V/I per point</b><ul><li>R cold: the initial slope; <span class="m"><span class="math inline">\(\Delta\)</span>(slope)</span></li></ul></li></ul><h3 class="anchored">Results table</h3><p>R by the short and long arrangements against the ohmmeter, V₁ + V₂ against V₃ at three scales, the lamp's resistance, cold and hot.</p><h3 class="anchored">At the Bench</h3><p>The lamp's curve is the Bench at its most useful: twenty points typed as the voltage is raised, the curve bending as the filament heats, the point density in 0–500 mV checked against the guide's requirement (half the points there) and said so.</p><p class="cite">guion_05_corriente_continua_2.qmd L57–80 · guion_05_corriente_continua_2.qmd L82–102 · guion_05_corriente_continua_2.qmd L104–157</p></section>
+<section class="param practice" id="P6"><h2 class="anchored">6 · Descarga del condensador</h2><p class="param-meta"><code>P6</code> · Discharge of a capacitor · 3 questions</p><p>The time constant RC of an RC circuit from the half-life t½ measured repeatedly, and from the discharge curve V(t) linearised as ln V against t; the same without the external resistance (the voltmeter as R); comparison with the nominal R·C.</p><h3 class="anchored">Measured</h3><div class="table-wrap">
+<table class="inventory caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">What</th>
+<th data-quarto-table-cell-role="th">Instrument</th>
+<th data-quarto-table-cell-role="th">Unit</th>
+<th data-quarto-table-cell-role="th">Uncertainty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>R nominal (colour code) and measured</strong></td>
+<td>multimeter as ohmmeter</td>
+<td><span class="math inline">\(\Omega\)</span></td>
+<td>the code's tolerance; the multimeter's</td>
+</tr>
+<tr class="even">
+<td><strong>t½, the time for V to halve</strong></td>
+<td>chronometer, voltmeter</td>
+<td>s</td>
+<td>five repeats; mean and its error</td>
+</tr>
+<tr class="odd">
+<td><strong>V at instants t of one discharge (15–20 points), intervals &gt; 1 s</strong></td>
+<td>voltmeter with hold, chronometer</td>
+<td>V, s</td>
+<td>resolution; the meter's 1 s response</td>
+</tr>
+</tbody>
+</table>
+</div><h3 class="anchored">Tables</h3><ul class="k-list"><li><b>Resistances by colour code</b>, 3 rows: R nominal, R measured (<span class="math inline">\(\Omega\)</span>) <span class="m">measured</span></li><li><b>Half-life</b>, 5 rows: t½ (s) <span class="m">repeated <span class="math inline">\(\times 5\)</span></span>; mean t½ <span class="math inline">\(\pm\)</span> error; RC = t½/ln 2 (s) <span class="m">derived</span></li><li><b>Discharge V(t), with R and without</b>, 15 rows: t (s) <span class="m">measured</span>; V (V) <span class="m">measured</span>; ln V <span class="m">derived</span></li></ul><h3 class="anchored">Plots</h3><ul class="k-list"><li><b>ln V</b> against <b>t</b>: a straight line: slope −1/RC, intercept ln V₀; the fitted line drawn on the same figure</li><li><b>V</b> against <b>t</b>: the exponential itself (proposal: the app fits V = V₀ e^(−t/RC) directly as well, and compares with the linearised fit)</li></ul><h3 class="anchored">Fits, and what they give</h3><ul class="k-list"><li><b>ln V = m·t + b, least squares</b><ul><li>RC: RC = −1/m; <span class="m"><span class="math inline">\(\Delta\)</span>(RC) = |Δm/<span class="math inline">\(\mathrm{m}^{2}\)</span>| (question 3)</span></li><li>V₀: V₀ = e^b; <span class="m">V₀·Δb</span></li></ul></li><li><b>proposal: V = V₀·exp(−t/<span class="math inline">\(\tau\)</span>), nonlinear least squares, weighted</b><ul><li><span class="math inline">\(\tau\)</span> = RC: the fit's parameter; <span class="m">from the covariance; compared with the linearised value</span></li></ul></li></ul><h3 class="anchored">Results table</h3><p>RC from t½, RC from the ln V–t slope, with R, RC without external R (the voltmeter's resistance), RC nominal (R measured × C nominal), the discrepancy explained.</p><h3 class="anchored">At the Bench</h3><p>The discharge is timed: readings arrive every few seconds while the capacitor empties, and the Bench must take them without the student looking away; the ln V–t line and RC update per reading, and the departure from the line at low V (the meter's response, the electrolytic capacitor) becomes visible as it happens.</p><p class="cite">guion_06_descarga_condensador.qmd L86–106 · guion_06_descarga_condensador.qmd L108–132 · guion_06_descarga_condensador.qmd L166–189 · guion_06_descarga_condensador.qmd L203–213</p></section>
+<section class="param practice" id="P7"><h2 class="anchored">7 · Ondas estacionarias</h2><p class="param-meta"><code>P7</code> · Standing waves on a string · 6 questions</p><p>The resonance frequencies of a string with fixed ends against the mode number n at constant tension, and against the tension at fixed n; the wave speed and the string's linear density; an elastic and an inelastic string.</p><h3 class="anchored">Measured</h3><div class="table-wrap">
+<table class="inventory caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">What</th>
+<th data-quarto-table-cell-role="th">Instrument</th>
+<th data-quarto-table-cell-role="th">Unit</th>
+<th data-quarto-table-cell-role="th">Uncertainty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>l, the string's length</strong></td>
+<td>tape</td>
+<td>m</td>
+<td>resolution; remeasured per tension for the elastic string</td>
+</tr>
+<tr class="even">
+<td><strong>m, the hanging mass; T = m·g</strong></td>
+<td>balance; masses</td>
+<td>kg → N</td>
+<td>the balance's resolution</td>
+</tr>
+<tr class="odd">
+<td><strong>f_n, the resonance of mode n</strong></td>
+<td>function generator and mechanical vibrator</td>
+<td>Hz</td>
+<td>the generator's resolution; the sharpness of the resonance</td>
+</tr>
+</tbody>
+</table>
+</div><h3 class="anchored">Tables</h3><ul class="k-list"><li><b>f_n against n at constant T (one table per tension, ≥ 3 tensions)</b>, 5 rows: n <span class="m">constant: 1 … 5</span>; f_n (Hz) <span class="m">measured</span>; λ_n = 2l/n (m) <span class="m">derived</span>; v = f_n·λ_n (m/s) <span class="m">derived</span></li><li><b>f_n against T at fixed n</b>, 5 rows: m, T = m·g, √T (kg, N, √N) <span class="m">measured, derived</span>; l (m) <span class="m">measured (elastic string)</span>; f_n (Hz) <span class="m">measured</span></li></ul><h3 class="anchored">Plots</h3><ul class="k-list"><li><b>f_n</b> against <b>n</b>: a straight line through the origin: slope v/(2l); from it v and, with T, μ</li><li><b>f_n</b> against <b>√T</b>: a straight line: slope n/(2l√μ); from it μ; for the elastic string μ changes with T and the line bends</li></ul><h3 class="anchored">Fits, and what they give</h3><ul class="k-list"><li><b>f_n = (v/2l)·n (+ b), least squares</b><ul><li>v: v = 2l·slope; <span class="m">propagated from <span class="math inline">\(\Delta\)</span>(slope) and Δl</span></li><li>μ: μ = T/v<span class="math inline">\(^{2}\)</span>; <span class="m">propagated</span></li></ul></li><li><b>f_n = s·√T (+ b), least squares</b><ul><li>μ: μ = (n/(2l·s))²; <span class="m">propagated</span></li></ul></li></ul><h3 class="anchored">Results table</h3><p>v and μ from f against n, per tension, μ from f against √T, v measured against v = √(T/μ).</p><h3 class="anchored">At the Bench</h3><p>The resonance is found by sweeping the generator: the student types f_n when the amplitude peaks; the f–n line and v, μ update, and the intercept's departure from zero is shown. Real data of both strings exist (datos_cuerda_elastica.csv, datos_cuerda_rigida.csv): test data for the core, with the elastic string's non-linearity in them.</p><p class="cite">guion_07_ondas_estacionarias.qmd L75–91 · guion_07_ondas_estacionarias.qmd L95–129 · datos_cuerda_elastica.csv · datos_cuerda_rigida.csv</p></section>
+<section class="param practice" id="P8"><h2 class="anchored">8 · Vaporización del agua</h2><p class="param-meta"><code>P8</code> · The latent heat of vaporisation of water · 6 questions</p><p>The heat of vaporisation q of water from the mass of water condensed in a fixed time <span class="math inline">\(\tau\)</span> at an electrical power W = I·V: by the method of differences with two powers, and by a straight line of M against E = W·<span class="math inline">\(\tau\)</span> with ten powers.</p><h3 class="anchored">Measured</h3><div class="table-wrap">
+<table class="inventory caption-top">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">What</th>
+<th data-quarto-table-cell-role="th">Instrument</th>
+<th data-quarto-table-cell-role="th">Unit</th>
+<th data-quarto-table-cell-role="th">Uncertainty</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>I and V of the heater</strong></td>
+<td>ammeter and voltmeter; a rheostat</td>
+<td>A, V</td>
+<td>resolution and accuracy</td>
+</tr>
+<tr class="even">
+<td><strong><span class="math inline">\(\tau\)</span>, the collection time</strong></td>
+<td>chronometer</td>
+<td>s</td>
+<td>resolution; 360 s suggested</td>
+</tr>
+<tr class="odd">
+<td><strong>the mass of the empty and the full beaker</strong></td>
+<td>balance</td>
+<td>g</td>
+<td>the balance's resolution</td>
+</tr>
+</tbody>
+</table>
+</div><h3 class="anchored">Tables</h3><ul class="k-list"><li><b>Two powers (differences)</b>, 2 rows: I, V (A, V) <span class="m">measured</span>; W = I·V (W) <span class="m">derived</span>; beaker empty, beaker + water, M (g) <span class="m">measured, derived</span></li><li><b>Ten powers (regression)</b>, 10 rows: I, V, W (A, V, W) <span class="m">measured, derived</span>; E = W·<span class="math inline">\(\tau\)</span> (J, cal) <span class="m">derived: unit change 1 cal = 4.186 J</span>; M (g) <span class="m">measured (by difference)</span></li></ul><h3 class="anchored">Plots</h3><ul class="k-list"><li><b>M</b> against <b>E</b>: a straight line: slope 1/q; the intercept ideally zero (questions 4 and 5); E on the abscissa because it is what was set</li></ul><h3 class="anchored">Fits, and what they give</h3><ul class="k-list"><li><b>M = s·E + n, least squares</b><ul><li>q: q = 1/s; <span class="m">Δq = |Δs/<span class="math inline">\(\mathrm{s}^{2}\)</span>|</span></li><li>n: the intercept; <span class="m">Δn; its meaning asked</span></li></ul></li><li><b>no fit: differences</b><ul><li>q: q = (W₁ − W₂)·<span class="math inline">\(\tau\)</span> / (M₁ − M₂); <span class="m">propagated</span></li></ul></li></ul><h3 class="anchored">Results table</h3><p>q by differences, q by regression, with the discrepancy from 530 cal/g.</p><h3 class="anchored">At the Bench</h3><p>One row per power, six minutes each: the session is long and the Bench quiet; each row's W, E and M fill themselves from I, V and the two weighings, the M–E line and q update, and the running comparison with 530 cal/g is shown or hidden at the teacher's choice.</p><p class="cite">guion_08_vaporizacion_agua.qmd L85–98 · guion_08_vaporizacion_agua.qmd L101–160</p></section>
+<h2 id="more" class="anchored">Also in the folder</h2><ul class="k-list"><li>The folder also holds two practices in Basque with Spanish versions, the speed of sound (09) and the moment of inertia of a disc (10), and a mechanics set (moments of inertia, Atwood's machine, free vibrations with one and two degrees of freedom, the gyroscope) used in other courses: not part of the eight of Técnicas Experimentales I, kept in view for Técnicas Experimentales II–IV.</li><li>An older UNED guide, Guiones de prácticas v3.2 (November 2019, UNED authors: collisions, the simple pendulum, the mass–spring oscillator, …), lies beside the site; the eight guides above are the course as Josu teaches it in Leioa.</li></ul>
+<h2 id="what-the-app-must-do" class="anchored">What the app must do, read off the eight</h2>
+<ul class="k-list">
+<li><b>Tables with repeated readings in a row.</b> Five chronometer readings of one b (P1), five timings of one spring (P3), five half-lives (P6): a row holds repeats, and their mean and the error of the mean (the course's "error cuadrático") are columns the app fills. No practice needs a table wider than twelve columns.</li>
+<li><b>Derived columns by formula, with units.</b> T = t₂₀/20, bT<span class="math inline">\(^{2}\)</span>, b<span class="math inline">\(^{2}\)</span>, P = M·g, sin <span class="math inline">\(\theta\)</span> = h/L, a = 2d/t<span class="math inline">\(^{2}\)</span>, ln V, λ = 2l/n, E = W·<span class="math inline">\(\tau\)</span> in joules and calories: every practice has them, and two of them change units on the way (g → kg, J → cal). Units on columns (I03) are not a luxury here; they are what the guides write in every header.</li>
+<li><b>Nine straight-line fits, and nothing else is required.</b> Every fit the guides ask for is y = m·x + n by least squares, with m and n and their errors Δm and Δn: bT<span class="math inline">\(^{2}\)</span> against b<span class="math inline">\(^{2}\)</span> (P1), P against Δx and T<span class="math inline">\(^{2}\)</span> against M (P2), a against sin <span class="math inline">\(\theta\)</span> (P3), 1/V against 1/R (P4), ln V against t (P6), f against n and f against √T (P7), M against E (P8). P5's lamp curve is plotted, not fitted. The general nonlinear fit (KaleidaGraph's, and the proposal for P6's exponential) is a second step, not the first.</li>
+<li><b>Physical quantities from the fit's parameters, with propagated errors.</b> g = 4π²/m, K = 4π²/a, αm = b/a, RC = −1/m, q = 1/s, <span class="math inline">\(\varepsilon\)</span> = 1/n, r_i = m/n: a derived quantity is a formula on the parameters, with its error by the course's two rules (quadrature; the upper bound). The results table of each practice lists them; the app's fit report must give them directly (I03, I11).</li>
+<li><b>The course's conventions, exactly.</b> Errors with one significant figure; the mean and its error for repeats, the instrument's resolution when it is larger; propagation by quadrature or by the upper bound as the guide chooses. The app states which rule it applies (Settings ▸ Fits) and defaults to the guide's.</li>
+<li><b>KaleidaGraph's regression, reproduced.</b> The course's regression guide sends students to KaleidaGraph's Curve Fit ▸ General ▸ fit1 (y = m1 + m2·M0) with Display Equation: its parameters and their errors are what the students have been handing in. The app's linear fit must give the same numbers on the same data (I11), and the fit's label on the plot the same information.</li>
+<li><b>The Bench is the course's own instruction.</b> The course site tells the student: "introducid datos en el ordenador a medida que medís y verificad en tiempo real si el experimento está saliendo bien". Every practice has a natural unit of live entry (a row of repeats, a point of a curve), and three are timed (P6's discharge, P5's lamp, P8's six-minute rows).</li>
+<li><b>Real data to test on.</b> Two practices ship data of real sessions (P2 Hooke, two tables; P7 the two strings, with the elastic string's non-linearity): the core's first tests, and the first Bench replays (I07).</li>
+</ul>
+</article>
+
+
+<!-- Closes the reading column opened by _gen/docs-nav.html, adds the right
+     "On this page" list, and wires: current-page marking in the left nav,
+     breadcrumbs, the page TOC (from h2/h3 in the reading column) and a
+     scroll-spy. Pure DOM, no library. -->
+  </div>
+  <aside class="docs-toc"><button class="docs-fold" type="button" data-fold="toc" aria-label="Hide the page outline" title="Hide the page outline">›</button><div class="t">On this page</div><ol></ol></aside>
+</div>
+<script>
+(function () {
+  /* 0. The two side panels fold on their chevrons; the choice is remembered in this browser. */
+  var docs = document.querySelector('.docs');
+  if (docs) {
+    var store = {};
+    try { store = JSON.parse(localStorage.getItem('docs-fold') || '{}'); } catch (e) { store = {}; }
+    function apply() {
+      docs.classList.toggle('nav-folded', !!store.nav);
+      docs.classList.toggle('toc-folded', !!store.toc);
+      document.querySelectorAll('.docs-fold').forEach(function (b) {
+        var which = b.getAttribute('data-fold'), folded = !!store[which];
+        b.innerHTML = (which === 'nav') === folded ? '&rsaquo;' : '&lsaquo;';
+        var what = which === 'nav' ? 'the navigation' : 'the page outline';
+        b.title = (folded ? 'Show ' : 'Hide ') + what; b.setAttribute('aria-label', b.title);
+      });
+    }
+    document.querySelectorAll('.docs-fold').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var which = b.getAttribute('data-fold'); store[which] = !store[which];
+        try { localStorage.setItem('docs-fold', JSON.stringify(store)); } catch (e) {}
+        apply();
+      });
+    });
+    apply();
+  }
+  /* 0b. The header ribbon: mark the entry whose section holds this page. Quarto rewrites the hrefs to
+     relative paths, so folders are read from the resolved URLs; the Overview link gives the site root. */
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.site-nav a'));
+    if (!links.length) return;
+    /* a served URL may end in '/' (GitHub Pages: …/about/); read it as …/about/index.html */
+    function folder(path) { if (/\/$/.test(path)) path += 'index.html'; var s = path.split('/').filter(Boolean); return s.length > 1 ? s[s.length - 2] : ''; }
+    var wm = document.querySelector('a.wordmark');            // the wordmark links to the site root
+    var root = folder((wm || links[0]).pathname);
+    var map = { 'focus-literature': 'validation', user: 'manual', theory: 'manual' };
+    function key(path) { var f = folder(path); if (f === root) return 'overview'; if (/^I\d\d$/.test(f)) return 'ideas'; return map[f] || f; }
+    var here = key(location.pathname);
+    links.forEach(function (a) { a.classList.toggle('current', key(a.pathname) === here); });
+  })();
+
+  var main = document.querySelector('.docs-main');
+  var nav = document.querySelector('.docs-nav');
+  var toc = document.querySelector('.docs-toc ol');
+  if (!main || !nav || !toc) return;
+
+  /* 1. Left nav: mark the current page (and section, if the hash matches). */
+  var here = location.pathname.replace(/\/index\.html$/, '/');
+  var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
+  var pageLink = null, hashLink = null;
+  links.forEach(function (a) {
+    var p = a.pathname.replace(/\/index\.html$/, '/');
+    if (p !== here) return;
+    if (!a.hash && !pageLink) pageLink = a;
+    if (a.hash && a.hash === location.hash) hashLink = a;
+  });
+  var cur = hashLink || pageLink;
+  if (cur) {
+    cur.classList.add('current');
+    var det = cur.closest('details.group');
+    if (det) { det.open = true; det.classList.add('has-current'); }
+    /* Breadcrumbs: group title › page (› section). */
+    var crumbs = document.createElement('div');
+    crumbs.className = 'docs-crumbs';
+    var g = det ? det.querySelector('summary.t') : null;
+    var parts = [];
+    function push(t) { if (t && parts[parts.length - 1] !== t) parts.push(t); }
+    if (g) push(g.textContent.trim());
+    if (pageLink && pageLink !== cur) push(pageLink.textContent.trim());
+    push(cur.textContent.trim());
+    crumbs.innerHTML = parts.map(function (t, i) {
+      return (i ? '<span class="sep">›</span>' : '') + '<span>' + t.replace(/</g, '&lt;') + '</span>';
+    }).join('');
+    main.insertBefore(crumbs, main.firstChild);
+  }
+
+  /* 2. Right "On this page": h2 and h3 of the reading column. */
+  var used = {};
+  var heads = Array.prototype.slice.call(main.querySelectorAll('h2, h3')).filter(function (h) {
+    if (h.closest('.site-foot, .featured-band, .msg-grid, [data-toc="no"]')) return false;
+    if (h.classList.contains('unnumbered') || h.id === 'contenido') return false;
+    return h.textContent.trim().length > 0;
+  });
+  heads.forEach(function (h) {
+    if (!h.id) {
+      var s = h.textContent.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+        .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'sec';
+      while (used[s] || document.getElementById(s)) s += '-';
+      h.id = s;
+    }
+    used[h.id] = true;
+    var li = document.createElement('li');
+    if (h.tagName === 'H3') li.className = 'l3';
+    var a = document.createElement('a');
+    a.href = '#' + h.id;
+    /* This runs before KaTeX has rendered the headings, so a heading with mathematics still holds TeX
+       source: copy its markup, including the math spans, and let the page's KaTeX pass render the copy. */
+    var copy = h.cloneNode(true);
+    copy.querySelectorAll('.katex-mathml, annotation, .anchorjs-link').forEach(function (n) { n.remove(); });
+    var label = copy.textContent.trim().replace(/\s+/g, ' ');
+    if (copy.querySelector('.math, .math-done, .katex')) a.innerHTML = copy.innerHTML.trim();
+    else a.textContent = label.length > 72 ? label.slice(0, 70).replace(/[\s,;:]+\S*$/, '') + '…' : label;
+    a.title = label;
+    li.appendChild(a);
+    toc.appendChild(li);
+  });
+  if (!heads.length) { document.querySelector('.docs-toc').hidden = true; return; }
+
+  /* 3. Scroll-spy. */
+  var items = Array.prototype.slice.call(toc.querySelectorAll('a'));
+  function spy() {
+    var y = window.scrollY + 120, best = null;
+    heads.forEach(function (h) { if (h.getBoundingClientRect().top + window.scrollY <= y) best = h; });
+    items.forEach(function (a) { a.classList.toggle('current', best && a.getAttribute('href') === '#' + best.id); });
+  }
+  window.addEventListener('scroll', spy, { passive: true });
+  window.addEventListener('hashchange', spy);
+  spy();
+})();
+</script>
+<footer class="site-foot">
+  <div class="site-foot__inner">
+    <div class="foot-grid">
+      <div class="foot-about">
+        <h4 class="anchored">What this is</h4>
+        <p>The working site of one project: to build a Mac app with the features of KaleidaGraph and the window of the TRAE IDE, for the laboratory practices of the Physics degree, with a live bench mode where the student's readings become plots and fits as they are typed. It holds the brief, the study of KaleidaGraph, the design, the seed-place of ideas, a dated log of every step, the release notes and the manuals of the core and the app.</p>
+        <div class="cite-block">Josu M. Igartua · Departamento de Física, UPV/EHU<br>josu.igartua@ehu.eus</div>
+      </div>
+      <div><h4 class="anchored">This site</h4><ul>
+        <li><a href="../../index.html">Overview</a></li><li><a href="../../brief/index.html">Brief</a></li><li><a href="../../background/index.html">Background</a></li><li><a href="../../design/index.html">Design</a></li><li><a href="../../roadmap/index.html">Roadmap</a></li><li><a href="../../ideas/index.html">Ideas</a></li><li><a href="../../log/index.html">Log</a></li><li><a href="../../about/index.html">Method</a></li></ul></div>
+      <div><h4 class="anchored">Family</h4><ul>
+        <li><a href="https://jmigartua.github.io/diff-ref-struct-site/">diff-ref-struct</a>, the Rietveld app</li>
+        <li><a href="https://jmigartua.github.io/inverse-problems-configuration-space-site/">inverse problems</a>, the discourse</li>
+        <li><a href="https://www.synergy.com/">KaleidaGraph</a>, Synergy Software</li></ul></div>
+      <div><h4 class="anchored">Status</h4><ul>
+        <li>Published at <a href="https://jmigartua.github.io/lab-plot-fit-site/">jmigartua.github.io/lab-plot-fit-site</a>; the sources are private</li>
+        <li>Rebuilt from <code>data/*.yml</code> on every render</li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Josu M. Igartua · work in progress</span>
+      <span>Quarto · family design kit</span>
+    </div>
+  </div>
+</footer>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+    tabsets.forEach(function(tabset) {
+      const tabby = new Tabby('#' + tabset.id);
+    });
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
