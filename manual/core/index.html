@@ -137,13 +137,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the core: the <code>lpf</code> command line</h1>
-<p class="sub">Core 0.4.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
+<p class="sub">Core 0.6.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
 
 <h2 id="install" class="anchored">Build</h2>
 <pre>cd core
 cargo build --release          # target/release/lpf
 cargo test --release           # every test, including the comparisons with SciPy and NumPy
-lpf --version                  # lpf 0.4.0
+lpf --version                  # lpf 0.6.0
 lpf help [command]             # this manual, in the terminal</pre>
 
 <h2 id="files" class="anchored">Data files</h2>
@@ -167,6 +167,20 @@ lpf fit data.csv --x M --y T2 --sigma dT2 --scaled # … scaled by √(χ²/dof)
 lpf fit data.csv --x t --y V --model "V0*exp(-x/tau)" --start V0=8,tau=9 --bounds tau=0:10
 lpf fit data.csv --x t --y V --model "a + b*x + c*x^2" --start a=0,b=1,c=0 --eps 1e-12 --max 500</pre>
 <p>Every result says where its errors come from: <code>scatter</code> (unweighted), <code>weights</code>, or <code>weights scaled</code> (<a href="../theory/index.html#conventions">theory</a>). The general fit also reports the correlations, whether it converged and why it stopped, the parameters held at a bound, and the parameters the data cannot fix.</p>
+<p><b>KaleidaGraph's standard fits</b>, Exponential y = m0·e^(m1·x), Logarithmic y = m0 + m1·log(x), Power y = m0·x^m1, by linearisation as KaleidaGraph does them, or as the general fit of the same equation:</p>
+<pre>lpf fit data.csv --x t --y V --preset exponential                      # linearised: KaleidaGraph's standard fit
+lpf fit data.csv --x t --y V --preset exponential --method nonlinear   # the true least squares, from the linearised start</pre>
+<p><b>The Linear fit's statistics</b> as KaleidaGraph's View Results lists them, and the <b>confidence bands</b>:</p>
+<pre>lpf fit data.csv --x delta_x --y P --stats                 # adjusted R², standard errors, t, P, F, 95 % confidence limits
+lpf fit data.csv --x delta_x --y P --stats --level 0.99
+lpf fit data.csv --x delta_x --y P --band data             # the confidence band at every data x
+lpf fit data.csv --x delta_x --y P --band 0,0.05,0.12 --prediction   # the prediction band at given x</pre>
+
+<h2 id="gum" class="anchored">Measurement uncertainty by the GUM</h2>
+<pre>lpf gum "4*pi^2/a" --input a=2.369:gauss:0.077:11
+lpf gum "M*g" --input M=0.030:res:0.001 --input g=9.80665:gauss:0.00001
+lpf gum "(W1-W2)*tau/(M1-M2)" --input W1=typeA:52.1,52.3,52.0 --input W2=35.0:gauss:0.2 --input tau=360:res:1 --input M1=5.80:res:0.01 --input M2=3.95:res:0.01 --p 0.95 --mc 200000 --seed 1</pre>
+<p>Each input is <code>name=value:kind:parameter</code>: <code>gauss:u[:dof]</code> a Gaussian with its standard uncertainty (and degrees of freedom for a Type A given as u), <code>rect:a</code> a rectangular distribution of half-width a, <code>res:δ</code> the resolution of an instrument, <code>tri:a</code> a triangular one, or <code>name=typeA:r1,r2,…</code> the readings of a Type A evaluation. The report has three parts: the GUM uncertainty framework (the budget with each input's standard uncertainty, degrees of freedom, sensitivity coefficient, contribution and share; u_c, ν_eff, k, U and the coverage interval), the Monte Carlo propagation (M trials, the estimate, u, the symmetric and the shortest coverage intervals, the skewness) and the validation of the former against the latter at the tolerance of u written to <code>--digits</code> significant digits (<a href="../theory/index.html#gum">theory</a>).</p>
 
 <h2 id="formula" class="anchored">Formulas on columns</h2>
 <pre>lpf formula data.csv "T = t20/20" "T2[s^2] = T^2" --err t20=0.01
