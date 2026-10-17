@@ -149,25 +149,27 @@ document.addEventListener("DOMContentLoaded", function () {
     <li>The KaleidaGraph inventory from the running program and the manual's contents: <a href="../background/kaleidagraph/index.html">one entry per capability</a>, with sources. <span class="status status-done">first pass (L004)</span>; the pages of the curve-fit chapter, the export formats and the demo's limits still to be read, then the inventory closed.</li>
     <li>The practices of Técnicas Experimentales I read from Josu's UNED guides: for each, what is measured, with what instrument and uncertainty, the tables, what is plotted, what is fitted and what it gives, what the Bench shows: <a href="../background/practices/index.html">the eight</a>, with the course's error rules and its KaleidaGraph regression guide. <span class="status status-done">done (L011)</span> The first practice (Q6): Ley de Hooke proposed, for Josu. Técnicas Experimentales II–IV follow (R11).</li>
     <li>The app decided as a fork of Code – OSS, as the TRAE IDE is (R10); the languages English and Spanish (R12). <span class="status status-done">decided (L009, L010)</span></li>
+    <li>Q1–Q6 decided by Josu: Rust over stdio, the name kept, text files only, templates editable, Hooke first; I02–I05 given the green light as R13–R16. <span class="status status-done">decided (L013, L014)</span></li>
     <li>"Most used" measured for the teaching laboratories (syllabi, licences, live acquisition), two more programs read in full, the gaps against KaleidaGraph listed. <span class="status">to do</span></li>
     <li>The design proposal: the window, the modules, the Bench, the data model, six questions. <span class="status status-done">draft (L006)</span>; the feature set of version 1 as a table (P01…) drawn from the inventory, the gaps and the practices, for Josu to decide.</li>
     <li>The seed-place seeded with twelve ideas, the Live Bench assessed. <span class="status status-done">done (L007)</span></li>
   </ul>
-  <div class="done"><b>Done when</b> the KaleidaGraph inventory is closed, the version-1 feature table is on the site, and Q1, Q2, Q3, Q5 and Q6 each have a logged decision (the first practice's data sheet is in the repository; Q4 is decided).</div>
+  <div class="done"><b>Done when</b> the KaleidaGraph inventory is closed and the version-1 feature table is on the site. Met already: the first practice's data in the repository, Q1–Q6 decided (L010, L013). Phase 1 opens in parallel (L015).</div>
 </div>
 
-<div class="phase">
-  <div class="num">PHASE 1</div>
+<div class="phase now">
+  <div class="num">PHASE 1 · open (L016)</div>
   <h3 class="anchored">The core: tables, units, formulas, fits</h3>
-  <p class="goal">Everything of version 1 that computes, in the core and on the command line, each feature tested against an independent source: SciPy for the fits, KaleidaGraph's own results on its example files, hand calculations for units and propagation.</p>
+  <p class="goal">Everything of version 1 that computes, in the core and on the command line, each feature tested against an independent source: SciPy for the fits, KaleidaGraph's own results on its example files, hand calculations for units and propagation. In Rust, the command line as the app's interface (L013).</p>
   <ul>
-    <li>The table: columns with name, type, unit, uncertainty rule and format; CSV with a header of units read and written; KaleidaGraph's text exports read.</li>
+    <li>The table: columns with name, unit, uncertainty rule; CSV with a header of units read and written; KaleidaGraph's <code>c0</code>, <code>c1</code> … as addresses. <span class="status status-done">done (L016, core 0.1.0)</span>; types and formats, KaleidaGraph's text exports: to do.</li>
+    <li>Repeated readings by the course's rule and the propagation of errors by quadrature and by the upper bound, with each error's contribution. <span class="status status-done">done (L016, core 0.1.0)</span></li>
     <li>Formulas on named columns with units checked and uncertainties propagated; KaleidaGraph's notation and library files accepted.</li>
-    <li>The fits: linear (with and without weights, through the origin), polynomial, the standard transforms (exponential, logarithmic, power), the general nonlinear fit with user equations, limits and derivatives; parameters with uncertainties, covariance, <span class="math inline">\(\chi^2\)</span>/ν, R<span class="math inline">\(^{2}\)</span>, residuals, confidence bands; tested against SciPy and KaleidaGraph (I11).</li>
+    <li>The fits: linear (with and without weights, through the origin) <span class="status status-done">done (L016, core 0.1.0; test <code>hooke</code> against SciPy)</span>; polynomial, the standard transforms (exponential, logarithmic, power), the general nonlinear fit with user equations, limits and derivatives; parameters with uncertainties, covariance, <span class="math inline">\(\chi^2\)</span>/ν, R<span class="math inline">\(^{2}\)</span>, residuals, confidence bands; tested against SciPy and KaleidaGraph (I11): to do.</li>
     <li>The dependency graph: a change recomputes what depends on it, once, in order; a fit restarted from its last solution (I04).</li>
     <li>The first practice's whole pipeline run from the command line, from its data sheet to its fit report.</li>
   </ul>
-  <div class="done"><b>Done when</b> the first practice's fits agree with SciPy to the printed digits and with KaleidaGraph's example fits, from the command line.</div>
+  <div class="done"><b>Done when</b> the first practice's (Ley de Hooke, L013) fits agree with SciPy to the printed digits and with KaleidaGraph's fit1 on the same data, from the command line. SciPy: met for the straight lines (L016).</div>
 </div>
 
 <div class="phase">
