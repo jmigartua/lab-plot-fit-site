@@ -144,21 +144,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <h2 class="anchored">The window: TRAE's, holding KaleidaGraph's things</h2>
 <p>The brief asks for the interface of the TRAE IDE (R02). <code>APP_CONVENTIONS.md</code>, carried over from diff-ref-struct, already describes that window in full: the activity bar, the sidebar, the main area of tabs that split, the bottom panel, the inspector, the status bar, every separator draggable, every panel collapsible and movable, native window tabbing, ⌘K. What is this project's is what goes in each place:</p>
-<pre>┌────┬───────────────┬────────────────────────────────────────────┬──────────────┐
-│ ▦  │ PROJECT        │ ⟨position.table⟩ ⟨x–t.plot⟩ ⟨linear.fit⟩   │ INSPECTOR    │
-│ ▤  │  Data          │                                            │  the selected│
-│ ∿  │   position.table   the table, or the plot, or the fit's   │  column, plot│
-│ ≈  │  Plots         │   report; any of them split beside another │  variable or │
-│ ƒ  │   x–t.plot     │                                            │  fit, with   │
-│ ▭  │  Fits          │                                            │  its unit,   │
-│ ⏵  │   linear.fit   ├────────────────────────────────────────────┤  uncertainty,│
-│    │  Layouts       │ FORMULAS  ·  FIT LOG  ·  PROBLEMS  ·  LOG  │  and help    │
-│ ◐  │  Report        │ velocity = diff(position) / diff(time)     │              │
-│ ⚙  │  Versions      │                                            │              │
-│ ?  │  Bench session │                                            │              │
-├────┴───────────────┴────────────────────────────────────────────┴──────────────┤
-│ core 0.x · app 0.x · practice 3, group B · 24 readings · fit converged · saved  │
-└──────────────────────────────────────────────────────────────────────────────────┘
+<pre>+----+----------------+--------------------------------------------+---------------+
+| D  | PROJECT        | [position.table] [x-t.plot] [linear.fit]   | INSPECTOR     |
+| P  |  Data          |                                            |  the selected |
+| F  |   position.table   the table, or the plot, or the fit's    |  column, plot |
+| f  |  Plots         |   report; any of them split beside another |  variable or  |
+| R  |   x-t.plot     |                                            |  fit, with    |
+| B  |  Fits          |                                            |  its unit,    |
+|    |   linear.fit   +--------------------------------------------+  uncertainty, |
+|    |  Layouts       | FORMULAS  .  FIT LOG  .  PROBLEMS  .  LOG  |  and help     |
+| o  |  Report        | velocity = diff(position) / diff(time)     |               |
+| *  |  Versions      |                                            |               |
+| ?  |  Bench session |                                            |               |
++----+----------------+--------------------------------------------+---------------+
+| core 0.x . app 0.x . practice 3, group B . 24 readings . fit converged . saved  |
++---------------------------------------------------------------------------------+
+  D Data  P Plots  F Fits  f Formulas  R Report  B Bench   o light/dark  * Settings  ? Help
 </pre>
 <ul class="k-list">
 <li><b>The sidebar</b> shows the project's files by their role (Data, Plots, Fits, Layouts, Report, Versions, the Bench's session), as diff-ref-struct's W5 does, never the folder alphabetically; hovering a file says what it holds (columns, points, the fit's <span class="math inline">\(\chi^2\)</span>).</li>
