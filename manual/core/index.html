@@ -137,13 +137,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the core: the <code>lpf</code> command line</h1>
-<p class="sub">Core 0.10.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
+<p class="sub">Core 0.11.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
 
 <h2 id="install" class="anchored">Build</h2>
 <pre>cd core
 cargo build --release          # target/release/lpf
 cargo test --release           # every test, including the comparisons with SciPy and NumPy
-lpf --version                  # lpf 0.10.0
+lpf --version                  # lpf 0.11.0
 lpf help [command]             # this manual, in the terminal</pre>
 
 <h2 id="files" class="anchored">Data files</h2>
@@ -200,6 +200,12 @@ lpf fit data.csv --x t --y V --preset exponential --method nonlinear   # the tru
 lpf fit data.csv --x delta_x --y P --stats --level 0.99
 lpf fit data.csv --x delta_x --y P --band data             # the confidence band at every data x
 lpf fit data.csv --x delta_x --y P --band 0,0.05,0.12 --prediction   # the prediction band at given x</pre>
+
+<h2 id="formula" class="anchored">Formulas</h2>
+<pre>lpf formula data.csv "P[N] = M*g0" "T = t20/20" "T2[s^2] = T^2" --err M=0.1,t20=0.01     # new columns, with ΔP, ΔT, ΔT2 beside them
+lpf formula data.csv "v[m/s] = x/t" --upper --out data.csv                               # the upper bound; the file written
+cat data.csv | lpf formula - "P[N] = M*g0" --csv                                          # the window's unsaved table; the CSV printed</pre>
+<p>A formula <code>name[unit] = expr</code> over the table's columns, by name or by <code>c0</code>, <code>c1</code>…, with the constants <code>g0</code>, <code>pi</code>, <code>e</code>, the functions of one value (<code>sqrt abs ln log exp sin cos tan asin acos atan sinh cosh tanh</code>) and of several values in a row (<code>mean sem sd min max sum</code>). It is evaluated in SI, its unit derived and checked (metres plus seconds is refused), and written in the unit asked for in brackets, or the SI base form. <code>--err</code> gives columns' uncertainties (the instruments' resolutions); the new column's uncertainty is propagated by quadrature, or by the upper bound with <code>--upper</code>, and written as a column <code>delta_&lt;name&gt;</code> beside it (<a href="../theory/index.html#propagation">theory</a>). The table comes back as the standard CSV through the sheet: every cell not computed keeps its digits as written, a computed value is written with 13 significant digits and no floating-point noise. <code>--out</code> writes the file, <code>--csv</code> prints the text, and the JSON result carries the same text as <code>csv</code>.</p>
 
 <h2 id="fitfile" class="anchored">A fit as a file</h2>
 <pre>lpf fit new datos_hooke_1.csv --x delta_x --y P &gt; hooke_P_line.fit.json          # a straight line
