@@ -137,13 +137,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the core: the <code>lpf</code> command line</h1>
-<p class="sub">Core 0.9.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
+<p class="sub">Core 0.10.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
 
 <h2 id="install" class="anchored">Build</h2>
 <pre>cd core
 cargo build --release          # target/release/lpf
 cargo test --release           # every test, including the comparisons with SciPy and NumPy
-lpf --version                  # lpf 0.9.0
+lpf --version                  # lpf 0.10.0
 lpf help [command]             # this manual, in the terminal</pre>
 
 <h2 id="files" class="anchored">Data files</h2>
@@ -173,7 +173,7 @@ lpf plot hooke_P.plot.json --width 800 --height 500 --xrange 0.03,0.08          
 cat hooke_P.plot.json | lpf plot - --dir . --width 800 --height 500                  # the window's unsaved file, its table relative to --dir
 lpf ticks --min 2.596e-5 --max 2.604e-5 --length 500                                 # an axis alone: ×10⁻⁵ in the title, labels 2.596 … 2.604
 lpf ticks --min 3 --max 2500 --length 600 --log                                      # 10⁰ … 10⁴</pre>
-<p>A plot is a file of the project, <code>name.plot.json</code>: its table (relative to the plot file), the x column, the y columns each with an optional error-bar column, the kind (<code>scatter</code>, <code>line</code>, <code>lines</code>), the title, the axis labels (else the columns' names and units), log axes, fixed ranges. It holds no copy of the data: a plot always follows its table. <code>plot</code> resolves it for the window: each point with its values and its fractions of the axes, the error bars' ends as fractions, and the axes with their ticks placed for the width and height given, so that the window only maps fractions to pixels. The ticks: steps of 1, 2 or 5 times a power of ten, as many as the space allows (one label per 70 px along x, 32 along y), the range anchored on ticks, the common factor (×<span class="math inline">\(10^{-5}\)</span>) or the offset (+ 10.6048) taken into the axis title when the digits that change are far down, the true minus sign, log axes by decades (<a href="../theory/index.html#axes">theory</a>). Each axis also carries its map from a fraction to a value, value = a + b·t (10^(a + b·t) on a log axis), which is what the window uses for the readout under the cursor and for the ranges of a zoom.</p>
+<p>A plot is a file of the project, <code>name.plot.json</code>: its table (relative to the plot file), the x column, the y columns each with an optional error-bar column, the kind (<code>scatter</code>, <code>line</code>, <code>lines</code>), the title, the axis labels (else the columns' names and units), log axes, fixed ranges. It holds no copy of the data: a plot always follows its table. <code>plot</code> resolves it for the window: each point with its values and its fractions of the axes, the error bars' ends as fractions, and the axes with their ticks placed for the width and height given, so that the window only maps fractions to pixels. The ticks: steps of 1, 2 or 5 times a power of ten, as many as the space allows (one label per 70 px along x, 32 along y), the range anchored on ticks, the common factor (<span class="math inline">\(\times 10^{-5}\)</span>) or the offset (+ 10.6048) taken into the axis title when the digits that change are far down, the true minus sign, log axes by decades (<a href="../theory/index.html#axes">theory</a>). Each axis also carries its map from a fraction to a value, value = a + b·t (10^(a + b·t) on a log axis), which is what the window uses for the readout under the cursor and for the ranges of a zoom.</p>
 
 <h2 id="stats" class="anchored">Repeated readings</h2>
 <pre>lpf stats data.csv --col t20 --resolution 0.01</pre>
@@ -200,6 +200,14 @@ lpf fit data.csv --x t --y V --preset exponential --method nonlinear   # the tru
 lpf fit data.csv --x delta_x --y P --stats --level 0.99
 lpf fit data.csv --x delta_x --y P --band data             # the confidence band at every data x
 lpf fit data.csv --x delta_x --y P --band 0,0.05,0.12 --prediction   # the prediction band at given x</pre>
+
+<h2 id="fitfile" class="anchored">A fit as a file</h2>
+<pre>lpf fit new datos_hooke_1.csv --x delta_x --y P &gt; hooke_P_line.fit.json          # a straight line
+lpf fit new datos.csv --x t --y V --kind model --model "V0*exp(-x/tau)" --start V0=8,tau=10 &gt; V_tau.fit.json
+lpf fit run hooke_P_line.fit.json                                                   # the report
+cat hooke_P_line.fit.json | lpf fit run - --dir .                                   # the window's unsaved file
+lpf plot hooke_P.plot.json --width 800 --height 500 --rheight 110                   # a plot listing the fit: its curve and residuals</pre>
+<p>A fit is a file of the project, <code>name.fit.json</code>: its table (relative to the fit file), the x and y columns, the kind (<code>line</code>, <code>poly</code>, <code>model</code>, or KaleidaGraph's <code>exponential</code>, <code>logarithmic</code>, <code>power</code>), and how: <code>origin</code> (a line through the origin), <code>sigma</code> (a column of <span class="math inline">\(\sigma\)</span>, or one value for every point), <code>scaled</code>, <code>order</code>, <code>model</code> with <code>start</code> and <code>bounds</code>, <code>method</code> (<code>linearised</code> as KaleidaGraph, or <code>nonlinear</code>) and <code>level</code>. <code>fit run</code> reports the same shape whatever the model: the equation with the columns' names (<code>P = m·delta_x + n</code>), each parameter with its error, its unit from the columns' units (N/m, N; the coefficient of x<span class="math inline">\(^{2}\)</span> in N/<span class="math inline">\(\mathrm{m}^{2}\)</span>, m1 of an exponential in 1/s) and written by the course's rule (<code>m = 16.2 ± 0.2 N/m</code>, <a href="../theory/index.html#results">theory</a>), the points and degrees of freedom, <span class="math inline">\(\chi^2\)</span>, <span class="math inline">\(\chi^2\)</span>/ν, R<span class="math inline">\(^{2}\)</span> (and r), where the errors come from, whether it converged, the Linear fit's statistics, the residuals row by row, the curve over the data's range, the report's lines as a lab report writes them, and the matching <code>lpf fit</code> result in full. A plot file that lists the fit in its <code>fits</code> draws the curve over its view and, with <code>--rheight</code>, the residuals on an axis of their own, symmetric about zero.</p>
 
 <h2 id="gum" class="anchored">Measurement uncertainty by the GUM</h2>
 <pre>lpf gum "4*pi^2/a" --input a=2.369:gauss:0.077:11
