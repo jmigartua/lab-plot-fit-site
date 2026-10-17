@@ -137,13 +137,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the core: the <code>lpf</code> command line</h1>
-<p class="sub">Core 0.3.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
+<p class="sub">Core 0.4.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
 
 <h2 id="install" class="anchored">Build</h2>
 <pre>cd core
 cargo build --release          # target/release/lpf
 cargo test --release           # every test, including the comparisons with SciPy and NumPy
-lpf --version                  # lpf 0.3.0
+lpf --version                  # lpf 0.4.0
 lpf help [command]             # this manual, in the terminal</pre>
 
 <h2 id="files" class="anchored">Data files</h2>
@@ -182,6 +182,12 @@ lpf propagate "b/a" --at a=2.369474,b=0.0543 --errors a=0.077,b=0.0084</pre>
 
 <h2 id="units" class="anchored">Units</h2>
 <p>Written as the guides write them: <code>m/s^2</code>, <code>N/m</code>, <code>s^2</code>, <code>kg·m/s^2</code>, <code>cal</code>, <code>mV</code>, <code>kΩ</code>, <code>µs</code>. The SI base and derived units (N, J, W, Pa, V, <span class="math inline">\(\Omega\)</span>, C, F, Hz, T, H), cal (4.186 J), eV, L, min, h, deg, %, with the SI prefixes. A value is converted between units of one dimension (<code>Mkg[kg] = M</code> with M in g; <code>E[cal] = W*tau</code>); a conversion between dimensions is an error.</p>
+
+<h2 id="project" class="anchored">Projects</h2>
+<pre>lpf project hooke.json graph                      # the nodes and what each depends on
+lpf project hooke.json run --save                 # everything recomputed in order; the results saved in the file
+lpf project hooke.json set "dynamic.t20[0]=7.45" --save    # one cell changed: only what depends on it is recomputed</pre>
+<p>A project is a JSON file: <code>tables</code> (named tables with their columns, units and uncertainty rules), <code>formulas</code> (each <code>{"table", "text"}</code>, the text as in <code>lpf formula</code>), <code>fits</code> (each with a <code>name</code>, its <code>table</code>, <code>x</code> and <code>y</code> columns, a <code>kind</code> of <code>line</code> with <code>origin</code>, <code>poly</code> with <code>order</code>, or <code>model</code> with <code>equation</code>, <code>parameters</code>, <code>start</code> and <code>bounds</code>; <code>sigma</code> a column's name, <code>"auto"</code> for the y column's own uncertainties, or empty), and <code>derived</code> (each with a <code>name</code>, an <code>expression</code> over the fits' parameters written <code>fitname_param</code>, such as <code>4*pi^2/dynamic_m</code>, and other derived names; <code>upper_bound</code> for the course's rule; a <code>unit</code> for the report). <code>run</code> computes every node in dependency order and writes <code>fit_results</code> and <code>derived_results</code> into the file with <code>--save</code>. <code>set</code> changes cells (an empty value clears; a row past the end extends the table) and recomputes only what depends on them, printing the list of what changed with each node's outcome, which is what the Bench shows on each reading. A node that fails (a formula whose units do not match) reports its message; the rest runs. A cycle, or a dependency on a column that does not exist, is refused with its name.</p>
 
 <h2 id="json" class="anchored">Output</h2>
 <p>Every command writes JSON to standard output, with the same fields the library returns (<code>LineFit</code>, <code>PolyFit</code>, <code>NonlinearFit</code>, <code>Repeats</code>, <code>Propagated</code>, <code>Applied</code>); an error goes to standard error with exit code 2 and says what was wrong and what to do.</p>
