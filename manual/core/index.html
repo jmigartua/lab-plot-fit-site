@@ -137,13 +137,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the core: the <code>lpf</code> command line</h1>
-<p class="sub">Core 0.11.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
+<p class="sub">Core 0.12.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
 
 <h2 id="install" class="anchored">Build</h2>
 <pre>cd core
 cargo build --release          # target/release/lpf
 cargo test --release           # every test, including the comparisons with SciPy and NumPy
-lpf --version                  # lpf 0.11.0
+lpf --version                  # lpf 0.12.0
 lpf help [command]             # this manual, in the terminal</pre>
 
 <h2 id="files" class="anchored">Data files</h2>
@@ -157,7 +157,8 @@ cat data.csv | lpf read - --values   # a path of - reads standard input (the win
 lpf edit data.csv --set "P[18]=1.87" --add-row         # a row beyond the end is added; --add-row adds an empty one (the next reading's)
 lpf edit data.csv --add-column "F(N)" --rename "c4=dT(s)" --delete-column c2 --delete-row 0
 lpf edit data.csv --set "x[0]=" --out data.csv         # an empty value empties the cell; --out writes the file, else the CSV is printed
-lpf edit - --set "c1[0]=2,5" --json &lt; data.csv       # from standard input; --json: the table's cells and the CSV text</pre>
+lpf edit - --set "c1[0]=2,5" --json &lt; data.csv       # from standard input; --json: the table's cells and the CSV text
+lpf edit data.csv --sort t --out data.csv             # the rows ordered by a column (--sort-desc: descending), empty cells last</pre>
 <p>The operations apply in the order given and the table comes back as the app's standard CSV. The edit is made on the text, not on parsed numbers: every cell not touched keeps its digits as written (a student's <code>0.10</code> says the resolution was 0.01, and <code>0.1</code> would not). A column is addressed by its name or by its position, <code>c0</code>, <code>c1</code>…, which is what the app uses so that any name works. Every change the Data module makes goes through this command: the window never writes a number itself.</p>
 
 <h2 id="import" class="anchored">Importing a file of unknown layout</h2>
@@ -212,7 +213,8 @@ cat data.csv | lpf formula - "P[N] = M*g0" --csv                                
 lpf fit new datos.csv --x t --y V --kind model --model "V0*exp(-x/tau)" --start V0=8,tau=10 &gt; V_tau.fit.json
 lpf fit run hooke_P_line.fit.json                                                   # the report
 cat hooke_P_line.fit.json | lpf fit run - --dir .                                   # the window's unsaved file
-lpf plot hooke_P.plot.json --width 800 --height 500 --rheight 110                   # a plot listing the fit: its curve and residuals</pre>
+lpf plot hooke_P.plot.json --width 800 --height 500 --rheight 110                   # a plot listing the fit: its curve and residuals
+# with "band": "confidence" (or "prediction") in the plot file: each straight line's band at the fit's level, as fractions beside its curve</pre>
 <p>A fit is a file of the project, <code>name.fit.json</code>: its table (relative to the fit file), the x and y columns, the kind (<code>line</code>, <code>poly</code>, <code>model</code>, or KaleidaGraph's <code>exponential</code>, <code>logarithmic</code>, <code>power</code>), and how: <code>origin</code> (a line through the origin), <code>sigma</code> (a column of <span class="math inline">\(\sigma\)</span>, or one value for every point), <code>scaled</code>, <code>order</code>, <code>model</code> with <code>start</code> and <code>bounds</code>, <code>method</code> (<code>linearised</code> as KaleidaGraph, or <code>nonlinear</code>) and <code>level</code>. <code>fit run</code> reports the same shape whatever the model: the equation with the columns' names (<code>P = m·delta_x + n</code>), each parameter with its error, its unit from the columns' units (N/m, N; the coefficient of x<span class="math inline">\(^{2}\)</span> in N/<span class="math inline">\(\mathrm{m}^{2}\)</span>, m1 of an exponential in 1/s) and written by the course's rule (<code>m = 16.2 ± 0.2 N/m</code>, <a href="../theory/index.html#results">theory</a>), the points and degrees of freedom, <span class="math inline">\(\chi^2\)</span>, <span class="math inline">\(\chi^2\)</span>/ν, R<span class="math inline">\(^{2}\)</span> (and r), where the errors come from, whether it converged, the Linear fit's statistics, the residuals row by row, the curve over the data's range, the report's lines as a lab report writes them, and the matching <code>lpf fit</code> result in full. A plot file that lists the fit in its <code>fits</code> draws the curve over its view and, with <code>--rheight</code>, the residuals on an axis of their own, symmetric about zero.</p>
 
 <h2 id="gum" class="anchored">Measurement uncertainty by the GUM</h2>
