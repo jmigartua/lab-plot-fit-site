@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <details class="group" open=""><summary class="t">Background</summary><ul><li><a href="../../background/index.html">The programs that inspire</a></li><li><a href="../../background/kaleidagraph/index.html">KaleidaGraph, the baseline</a></li><li><a href="../../background/practices/index.html">The practices: Técnicas Experimentales I</a></li></ul></details>
 <details class="group" open=""><summary class="t">Design / Roadmap</summary><ul><li><a href="../../design/index.html">Design: the proposal</a></li><li><a href="../../roadmap/index.html">Roadmap: the phases</a></li></ul></details>
 <details class="group" open=""><summary class="t">Ideas</summary><ul><li><a href="../../ideas/index.html">The seed-place</a></li><li><a href="../../ideas/I01/index.html">I01 · The Live Bench: the student is the instrument, and the plots and fits follow every keystroke</a></li><li><a href="../../ideas/I02/index.html">I02 · Practice templates: the teacher prepares the file, the student opens it and measures</a></li><li><a href="../../ideas/I03/index.html">I03 · Uncertainties and units in every column, propagated through formulas and into weighted fits</a></li><li><a href="../../ideas/I04/index.html">I04 · The visible pipeline: data to plot to fit as a graph the student can read</a></li><li><a href="../../ideas/I05/index.html">I05 · The lab report exported: figures, tables and the fit's results, by the family's figure rules</a></li><li><a href="../../ideas/I06/index.html">I06 · The teacher's class view: every bench's live data on one screen</a></li><li><a href="../../ideas/I07/index.html">I07 · Sessions recorded as they happen, and replayed</a></li><li><a href="../../ideas/I08/index.html">I08 · Entry made for one hand on the apparatus</a></li><li><a href="../../ideas/I09/index.html">I09 · The phone as the second keyboard at the bench</a></li><li><a href="../../ideas/I10/index.html">I10 · Formula Entry with named columns, and KaleidaGraph's files read</a></li><li><a href="../../ideas/I11/index.html">I11 · Every fit checked against Python and KaleidaGraph, and reported as the practices ask</a></li><li><a href="../../ideas/I12/index.html">I12 · The tutorial as a film: a whole practice at the Bench, recorded and played by the app</a></li></ul></details>
-<details class="group" open=""><summary class="t">Manual</summary><ul><li><a href="../../manual/index.html">About the manual</a></li><li><a href="../../manual/core/index.html">Using the core (lpf)</a></li><li><a href="../../manual/theory/index.html">Theoretical basis</a></li></ul></details>
+<details class="group" open=""><summary class="t">Manual</summary><ul><li><a href="../../manual/index.html">About the manual</a></li><li><a href="../../manual/app/index.html">Using the app</a></li><li><a href="../../manual/core/index.html">Using the core (lpf)</a></li><li><a href="../../manual/theory/index.html">Theoretical basis</a></li></ul></details>
 <details class="group" open=""><summary class="t">Method / Log</summary><ul><li><a href="../../about/index.html">How this site works</a></li><li><a href="../../log/index.html">The log, every dated step</a></li></ul></details>
 <details class="group" open=""><summary class="t">Release notes</summary><ul><li><a href="../../releases/index.html">Release notes</a></li></ul></details>
 </nav>
@@ -137,18 +137,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the core: the <code>lpf</code> command line</h1>
-<p class="sub">Core 0.7.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
+<p class="sub">Core 0.8.0. Every feature of the core is a command here; the app will call the same commands over stdio (Q1, L013). Every example on this page was run before it was published. The text of <code>lpf help</code> is this page's.</p>
 
 <h2 id="install" class="anchored">Build</h2>
 <pre>cd core
 cargo build --release          # target/release/lpf
 cargo test --release           # every test, including the comparisons with SciPy and NumPy
-lpf --version                  # lpf 0.7.0
+lpf --version                  # lpf 0.8.0
 lpf help [command]             # this manual, in the terminal</pre>
 
 <h2 id="files" class="anchored">Data files</h2>
 <p>A table is a CSV whose header names each column with its unit in brackets, as the practices' files are written: <code>M(g),x(mm),P(N),delta_x(m)</code>. The delimiter is found (comma, semicolon, tab); with a semicolon or a tab, a decimal comma is accepted. An empty field is an empty cell. A row with more fields than the header has names gets the extra fields as columns named <code>c4</code>, <code>c5</code>… by position, so that nothing measured is dropped. Any column can be addressed by its name or, as in KaleidaGraph, by its position: <code>c0</code>, <code>c1</code>…</p>
-<pre>lpf read data.csv              # the columns, their units, how many values and empty cells</pre>
+<pre>lpf read data.csv              # the columns, their units, how many values and empty cells
+lpf read data.csv --values     # every cell as a number (null when empty), each column's uncertainty rule, and the cells as written
+cat data.csv | lpf read - --values   # a path of - reads standard input (the window's unsaved text); so do edit, stats and fit</pre>
+
+<h2 id="edit" class="anchored">Editing a table</h2>
+<pre>lpf edit data.csv --set "x[3]=0,714"                 # one cell; rows are 0-based; a comma typed as the decimal separator is written as a point
+lpf edit data.csv --set "P[18]=1.87" --add-row         # a row beyond the end is added; --add-row adds an empty one (the next reading's)
+lpf edit data.csv --add-column "F(N)" --rename "c4=dT(s)" --delete-column c2 --delete-row 0
+lpf edit data.csv --set "x[0]=" --out data.csv         # an empty value empties the cell; --out writes the file, else the CSV is printed
+lpf edit - --set "c1[0]=2,5" --json &lt; data.csv       # from standard input; --json: the table's cells and the CSV text</pre>
+<p>The operations apply in the order given and the table comes back as the app's standard CSV. The edit is made on the text, not on parsed numbers: every cell not touched keeps its digits as written (a student's <code>0.10</code> says the resolution was 0.01, and <code>0.1</code> would not). A column is addressed by its name or by its position, <code>c0</code>, <code>c1</code>…, which is what the app uses so that any name works. Every change the Data module makes goes through this command: the window never writes a number itself.</p>
 
 <h2 id="import" class="anchored">Importing a file of unknown layout</h2>
 <pre>lpf import scope_export.txt                                   # the guess and the table
