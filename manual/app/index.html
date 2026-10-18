@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <article class="page-article">
 <h1>Using the app</h1>
-<p class="sub">App 0.9.0 with core 0.13.0. One section per module as each is built; the text of each section is what the module's help shows. Numbers are written and shown with the point as the decimal separator; a comma typed on entry is accepted and written as a point (R20).</p>
+<p class="sub">App 0.10.0 with core 0.14.0. One section per module as each is built; the text of each section is what the module's help shows. Numbers are written and shown with the point as the decimal separator; a comma typed on entry is accepted and written as a point (R20).</p>
 
 <h2 id="install" class="anchored">Installing the app</h2>
 <p>The app is a Mac application, <code>lab-plot-fit.app</code>, built from this repository (<code>app/tools/package_mac.py</code>, app 0.8.0): drag it to Applications and open it. It is signed for the Mac it was built on; on another Mac, macOS asks once: right-click the app, <b>Open</b>, and confirm. On the first launch macOS also asks for the login keychain ("lab-plot-fit wants to use your confidential information stored in lab-plot-fit Safe Storage"): that is the app's own encrypted store, where a GitHub sign-in would live; <b>Always Allow</b> is safe, the app asks at most once per build, and the window waits until the dialog is answered. Notarisation, which would make that step unnecessary, needs an Apple Developer account. A project folder dragged onto the app's icon in the Dock opens as the project; a table or a plot file dragged onto it opens in its module (the first time a kind of file is opened the app may show it as text: close it and open it again from the Project view).</p>
@@ -183,8 +183,14 @@ document.addEventListener("DOMContentLoaded", function () {
 <p><b>Rendering.</b> On <code>report.qmd</code>, <b>Report: render with Quarto</b> (HTML or PDF) runs Quarto when it is installed on the Mac (quarto.org; a PDF also needs a LaTeX distribution) and opens the result. Without Quarto, the skeleton and its pieces are still readable Markdown, and the figures are in <code>Report/_generated/figures</code>.</p>
 <p><b>A figure alone.</b> On a plot, <b>Export this plot as a figure…</b> saves the SVG with the same geometry, for a document of your own.</p>
 
+<h2 id="bench" class="anchored">The Bench</h2>
+<p>The Bench is the live mode of a practice: the student is the instrument. Open the table of the practice, have its plot open beside if you want to see the points arrive, and start a session: the pulse button on the table's title, ⌘B, or <b>Bench: start a session on this table</b>. A panel opens beside the table with the next cell, large, named with its column and unit ("M (g), row 18 · next reading"), the last rows under it, and the keys.</p>
+<p><b>Entering readings.</b> Type the reading and press Return: it goes into the table through the core (a decimal comma is accepted), the table is saved, and the plots and fits that use it redraw; the next cell is the next column, and the next row after the last column. The session begins at the first empty cell of the table, so a series is continued, never overwritten by accident. Tab and Shift-Tab move across the columns; ↑ (or <b>Repeat</b>) puts the last reading back in the box, for a repeated measurement; ⌘Z (or <b>Undo</b>) puts the last cell back as it was; Esc (or <b>End the session</b>) ends. No dialog opens during a session.</p>
+<p><b>The verdict.</b> After each reading the fits on the table are run again and the reading's row is judged: "✓ on the fit (1.1 s)" when its residual is within three residual standard deviations, or, in orange, "⚠ far from the fit (6.4 s): a suggestion to remeasure" (<a href="../theory/index.html#far">theory</a>). It is a suggestion: the reading stays until you undo it.</p>
+<p><b>The record.</b> Every session writes <code>Bench/&lt;table&gt;_&lt;date-time&gt;.session.csv</code>: the time in seconds from the start, the column, the row, the value and the action (commit, undo, end), so that a session can be read back, and a teacher can see how a group measured.</p>
+
 <h2 id="later" class="anchored">What follows</h2>
-<p>Masking of rows, a column's uncertainty rule in its header and an inspector for a column; the library of fit definitions; a stale mark on the report's figures; then the Bench, with its section here.</p>
+<p>The Bench's templates (the practice prepared by the teacher, the expected values shown or not), the window folding to the table and its plots during a session, a session replayed; masking of rows, a column's uncertainty rule in its header and an inspector for a column; the library of fit definitions; a stale mark on the report's figures.</p>
 </article>
 
 
